@@ -78,8 +78,8 @@ def update_page(url, new_loadtime):
 
         page.set_values(ave_load, standard_dev, num_visits + 1)
 
-        print url + ": loadtime = " + new + "---",
-        print page
+        #print url + ": loadtime = " + new + "---",
+        #print page
 
     # else add page to list
     else:
@@ -88,9 +88,9 @@ def update_page(url, new_loadtime):
         new_page.set_values(new_loadtime, 0, 1) 
         pages[url] = new_page
 
-        print url + ": loadtime = " + new + "---",
-        print new_page,
-        print "------------NEW"
+        #print url + ": loadtime = " + new + "---",
+        #print new_page,
+        #print "------------NEW"
 
 def calc_standard_dev(list, average):
     sum = 0
@@ -110,13 +110,19 @@ def sort_by_visits():
     sorted_by_visits = [ [page[1].get_visits(),page[0]] for page in items]
     sorted_by_visits.sort(reverse=True)
 
+    print sorted_by_visits
     return sorted_by_visits
 
 # return the most visited pages
-#def get_most_visited(amount, list_by_visits):
-    # will finish
-     
-    
+def get_most_visited(amount, list):
+
+    most_visited = []    
+    for i in range(0,amount):
+        url = list[i][1]
+        most_visited.append([url,pages[url]])
+
+    print most_visited
+    return most_visited
    
 # print each key : value pair in the pages hashmap
 def print_pages():
@@ -129,6 +135,8 @@ def print_pages():
 # main
 process_file(filename, image_src)
 #print_pages()
-sort_by_visits()
+
+get_most_visited(3, sort_by_visits())
+
 
 
