@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script type-"text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
+    <!-- LOAD TIME javascript program from online (PART I) -->
+    <script type="text/javascript">
+
+    var startTime = new Date();
+    var loadTime = 0.0;
+
+
+    $(document).ready(function() {
+        alert("Taking up some load time : )");
+        //console.log("   ")
+        var endTime = new Date();
+        loadTime = ((endTime.getTime() - startTime.getTime())/100)/10;
+        document.getElementById("wEndTime").innerHTML = loadTime;
+
+        loadtime_img = new Image(100,25);
+        loadtime_img.src = "../images/flower.jpg?loadtime=" + loadTime;
+
+    });
+
+    /*
+    document.onload = function() {
+        var endTime = new Date();
+        var loadTime = ((endTime.getTime() - startTime.getTime())/100)/10;
+        document.getElementById("DOMEndTime").innerHTML = loadTime;
+
+    } */
+    </script>
+
+
+
+</head>
+
+<body id="home">
+
+    <!-- LOAD TIME javascript program from online (PART II) -->
+    <br><br><br><center>
+    <script type="text/javascript">
+    //<!-- Begin
+        document.write('The window took <span id="wEndTime">0.0</span> seconds to load.<br>');
+        //document.write('The DOM took <span id="DOMEndTime">0.0</span> seconds to load.');
+      
+    // End -->
+    </script></center>
+
+</body>
+</html>
