@@ -9,9 +9,9 @@ class Page():
     standard_dev = 0;
     num_visits = 1;
 
-    def set_values(self, ave, sd, visits):
-        self.ave_load = ave
-        self.standard_dev = sd
+    def set_values(self, ave_load, standard_dev, visits):
+        self.ave_load = ave_load
+        self.standard_dev = standard_dev
         self.num_visits = visits
 
     def print_values(self):
