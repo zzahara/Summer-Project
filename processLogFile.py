@@ -32,6 +32,9 @@ class Page():
     def get_visits(self):
         return self.num_visits
 
+    def get_loadtimes(self):
+        return self.loadtimes
+
     def print_values(self):
         print "ave = " + self.ave_load + " stand_dev = " + self.standard_dev + " visits = " + self.num_visits
 
@@ -39,20 +42,19 @@ class Page():
         print self.loadtimes
 
     def __str__(self):
-        return str(self.ave_load) + ": " + str(self.standard_dev) + ": " + str(self.num_visits) 
+        return str(self.ave_load) + ": " + str(self.standard_dev) + ": " + str(self.num_visits)
 
 
 # open and read access.log file
 def process_file(filename, img_src):
-    
+    request = ''
     file = open(filename, "r");
-    line = file.readline();
-
+    
     for line in file:
-
         # get request
         split_log = line.split('\"');
-        request = (split_log[1].split(' '))[1];
+        if len(split_log) > 1:
+            request = (split_log[1].split(' '))[1];
 
         # get referer and update pages hashmap
         # only process this log if the http request contains the load time info
@@ -73,7 +75,6 @@ def get_loadtime(request, img_src):
 
 # store or update page values     
 def update_page(url, new_loadtime):
-    new = new_loadtime
     new_loadtime = float(new_loadtime)
    
     # if page is already in list update values
@@ -82,9 +83,11 @@ def update_page(url, new_loadtime):
         ave_load = page.ave_load
         num_visits = page.num_visits
 
+        print url
+        print page
         page.append(new_loadtime)
         ave_load = ((num_visits * ave_load) + new_loadtime)/ (num_visits + 1)
-        standard_dev = calc_standard_dev(page.loadtimes, ave_load)
+        standard_dev = calc_standard_dev(page.get_loadtimes(), ave_load)
 
         page.set_values(ave_load, standard_dev, num_visits + 1)
 
@@ -96,7 +99,10 @@ def update_page(url, new_loadtime):
         new_page = Page()
         new_page.append(new_loadtime)
         new_page.set_values(new_loadtime, 0, 1) 
+        
         pages[url] = new_page
+        print url
+        print pages[url]
 
         #print url + ": loadtime = " + new + "---",
         #print new_page,
@@ -111,8 +117,11 @@ def calc_standard_dev(list, average):
     else:
         for x in list:
             sum = sum + math.pow((x-average), 2)
+        print list
+        print "sum = " + str(sum)    
         return math.sqrt(sum/(len(list)-1))
-        
+    
+    
 
 def sort_by_visits(amount):
     items = pages.items()
@@ -151,7 +160,7 @@ def update_database():
     # Insert data
     for url in keys:
         page = pages[url]
-        c.execute("""INSERT INTO pages values (?,?,?,?)""", (str(url), page.get_aveload(), page.get_standarddev(), page.get_visits()))
+        c.execute("""INSERT INTO pages values (?,?,?,?,1)""", (str(url), page.get_aveload(), page.get_standarddev(), page.get_visits()))
         
     # Save the changes
     connect.commit()
@@ -163,13 +172,13 @@ def print_database():
     
 # Main
 process_file(filename, image_src)
-sort_by_visits(num_top_pages)
+#sort_by_visits(num_top_pages)
 print '\n'
 print_pages()
 
 print '\n'
-update_database()
-print_database()
+#update_database()
+#print_database()
 
 
 
