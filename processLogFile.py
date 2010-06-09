@@ -1,9 +1,13 @@
 import re
 import math
+import sqlite3
 from sys import argv
 
-script, filename, image_src = argv
+script, filename, image_src, num_top_pages = argv
 pages = dict() # keys = url : value = Page object
+
+connect = sqlite3.connect('pages.sqlite')
+c = connect.cursor()
 
 class Page():
     ave_load = 0;
@@ -19,6 +23,12 @@ class Page():
     def append(self,loadtime):
         self.loadtimes.append(loadtime)
  
+    def get_aveload(self):
+        return self.ave_load
+
+    def get_standarddev(self):
+        return self.standard_dev
+
     def get_visits(self):
         return self.num_visits
 
@@ -101,20 +111,22 @@ def calc_standard_dev(list, average):
     else:
         for x in list:
             sum = sum + math.pow((x-average), 2)
-
         return math.sqrt(sum/(len(list)-1))
         
 
-def sort_by_visits():
+def sort_by_visits(amount):
     items = pages.items()
     sorted_by_visits = [ [page[1].get_visits(),page[0]] for page in items]
     sorted_by_visits.sort(reverse=True)
 
     print sorted_by_visits
-    return sorted_by_visits
+    return get_most_visited(amount, sorted_by_visits)
 
 # return the most visited pages
 def get_most_visited(amount, list):
+
+    if amount > len(list):
+        amount = len(list)
 
     most_visited = []    
     for i in range(0,amount):
@@ -124,19 +136,42 @@ def get_most_visited(amount, list):
     print most_visited
     return most_visited
    
-# print each key : value pair in the pages hashmap
+# print each key:value pair in the pages hashmap
 def print_pages():
     keys = pages.keys()
 
     for url in keys:
         print url
         print pages[url]
-    
-# main
-process_file(filename, image_src)
-#print_pages()
 
-get_most_visited(3, sort_by_visits())
+# Database Functions
+def update_database():
+    keys = pages.keys()
+
+    # Insert data
+    for url in keys:
+        page = pages[url]
+        c.execute("""INSERT INTO pages values (?,?,?,?)""", (str(url), page.get_aveload(), page.get_standarddev(), page.get_visits()))
+        
+    # Save the changes
+    connect.commit()
+    
+def print_database():
+    c.execute('SELECT * FROM pages ORDER BY num_visits')
+    for row in c:
+        print row
+    
+# Main
+process_file(filename, image_src)
+sort_by_visits(num_top_pages)
+print '\n'
+print_pages()
+
+print '\n'
+update_database()
+print_database()
+
+
 
 
 
