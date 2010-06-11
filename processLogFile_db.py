@@ -9,6 +9,12 @@ connect = sqlite3.connect('pages.sqlite')
 c = connect.cursor()
 next_id = 0
 
+def init():
+    # clear table 
+    c.execute("""DELETE from pages""");
+    connect.commit()
+    print_database()
+
 def get_input():
     filename = rawinput("Enter log file: ")
     image_src = rawinput("Enter image source: ")
@@ -49,11 +55,11 @@ def update_database(referer, loadtime):
     id = c.fetchone()
 
     if id == None:
-        print 'none: next_id =  ' + str(next_id) + 'url= ' + referer
+        #print 'none: next_id =  ' + str(next_id) + 'url= ' + referer
         c.execute("""INSERT INTO pages values (?,?,?)""", (next_id, referer, loadtime))
         next_id = next_id + 1
     else:
-        print str(id) + ' ' + str(referer)
+        #print str(id) + ' ' + str(referer)
         c.execute("""INSERT INTO pages values (?,?,?)""", (id[0], referer, loadtime))
 
     connect.commit()
@@ -102,11 +108,11 @@ def calc_standard_dev(values, average):
     
     
 def print_database():
-    c.execute('SELECT * FROM pages ORDER BY num_visits')
+    c.execute('SELECT * FROM pages ORDER BY id')
     for row in c:
         print row
     
-        
+init()        
 process_file(filename, image_src)
 process_database()
-
+c.close()
