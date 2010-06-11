@@ -7,7 +7,7 @@ script, filename, image_src, num_top_pages = argv
 
 connect = sqlite3.connect('pages.sqlite')
 c = connect.cursor()
-next_id = 9
+next_id = 0
 
 def get_input():
     filename = rawinput("Enter log file: ")
@@ -107,6 +107,6 @@ def print_database():
         print row
     
         
-#process_file(filename, image_src)
+process_file(filename, image_src)
 process_database()
 
