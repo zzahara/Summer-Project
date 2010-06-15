@@ -1,6 +1,6 @@
 import re
 import math
-import sqlite3
+import sqlite3 
 from sys import argv
 
 script, filename, image_src, num_top_pages = argv
@@ -9,17 +9,54 @@ connect = sqlite3.connect('pages.sqlite')
 c = connect.cursor()
 next_id = 0
 
+fields = {'user':'STRING', 'page':'STRING', 'loadtime':'INTEGER', 'locale':'STRING', 'referer':'STRING', 'timestamp':'INTEGER', 'useragent':'STRING'}
+
 def init():
-    # clear table 
-    c.execute("""DELETE from pages""");
+    # delete table and index
+    c.execute(""" DROP TABLE IF EXISTS pages;""")
+    c.execute(""" DROP INDEX IF EXISTS pages_index;""")
+
+    # create string for fields and types
+    count = 0
+    values = ''
+    keys = fields.keys()
+    
+    for field in keys:
+        values = values + field + ' ' + fields[field]
+
+        if count < len(keys)-1:
+            values = values + ', '
+        count = count + 1
+
+    # create table
+    c.execute("CREATE TABLE IF NOT EXISTS pages(" + values + ");")
+
+    # create an index for each column
+    for field in keys:
+       c.execute("CREATE UNIQUE INDEX IF NOT EXISTS " + field + "_index ON pages(" + field + ");")
+        
     connect.commit()
-    print_database()
 
 def get_input():
     filename = rawinput("Enter log file: ")
     image_src = rawinput("Enter image source: ")
     num_top_pages = rawinput("Enter the number of top pages: ")
 
+def process_file2(filename, img_src):
+    request = ''
+    file = open(filename, "r")
+
+    # referer must be 2 or more chars to avoid "-" referers
+    pattern = '(?P<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) [^ ]+ [^ ]+ \[(?P<date>../.../....:..:..:.. .....)\] ' + '"GET (?P<bug>' + img_src + '[^"]+)" (?P<status>\d{3}) (?P<size>[^ ]+) "(?P<referer>[^"]{2,})" "(?P<useragent>[^"]+)"'
+    c = re.compile(pattern)
+
+    for line in file:
+        m = c.match(line)
+        if m:
+            event = m.groupdict()
+            loadtime = get_loadtime(event['bug'], img_src)
+            
+        
 
 # read log file, parse out loadtimes and urls, and store in database
 def process_file(filename, img_src):
@@ -112,7 +149,9 @@ def print_database():
     for row in c:
         print row
     
-init()        
-process_file(filename, image_src)
-process_database()
+#init()        
+process_file2(filename, image_src)
+#process_database()
+
 c.close()
+
