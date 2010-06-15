@@ -7,7 +7,6 @@ script, filename, image_src, num_top_pages = argv
 
 connect = sqlite3.connect('pages.sqlite')
 c = connect.cursor()
-next_id = 0
 
 table_cols = {'user':'STRING', 'page':'STRING', 'loadtime':'INTEGER', 'locale':'STRING', 'referer':'STRING', 'timestamp':'INTEGER', 'useragent':'STRING'}
 
@@ -17,6 +16,8 @@ def init():
     c.execute(""" DROP TABLE IF EXISTS pages;""")
     for col in keys:
        c.execute("DROP INDEX IF EXISTS " + col + "_index;")
+
+    connect.commit()
 
     # create string for fields and types
     count = 0
@@ -65,60 +66,34 @@ def get_values(bug, img_src):
     bug_values = dict(item.split("=") for item in end.split("&"))
     return bug_values
 
+# ------------------------------------------------------------
+#                     Database Functions
+# ------------------------------------------------------------
+
 def update_database(page_values):
     keys = table_cols.keys()
     values = []
 
     for col in keys:
-        print col + ':'
-        print page_values[col]
         values.append(page_values[col])
         
     c.execute("""INSERT INTO pages values (?,?,?,?,?,?,?)""", (values[0], values[1], values[2], values[3], values[4], values[5], values[6]))
     connect.commit()
 
-# read log file, parse out loadtimes and urls, and store in database
-def process_file2(filename, img_src):
-    request = ''
-    file = open(filename, "r");
 
-    for line in file:
-        # get request
-        split_log = line.split('\"');
-        if len(split_log) > 1:
-            request = (split_log[1].split(' '))[1];
+def num_users():
+    c.execute(""" SELECT DISTINCT user from pages """)
+    users = c.fetchall()
 
-        # get referer and store in database
-        # only process this log if the http request contains the load time info
-        if (request.startswith(img_src) and len(split_log) > 3):
-            referer = split_log[3]
+    return len(users)
 
-            if (referer != '-'): 
-                loadtime = get_loadtime(request, img_src)
-                update_database(referer, loadtime);
-
-    file.close()
-
-# parse http request for load time
-def get_loadtime(request, img_src):
-    pattern = img_src + '\?loadtime='
-    return re.sub(pattern, '', request)
-
-# store a new page into the database
-def update_database2(referer, loadtime):
-    global next_id
-    c.execute("""SELECT id FROM pages where url = ?""", (referer,))
-    id = c.fetchone()
-
-    if id == None:
-        #print 'none: next_id =  ' + str(next_id) + 'url= ' + referer
-        c.execute("""INSERT INTO pages values (?,?,?)""", (next_id, referer, loadtime))
-        next_id = next_id + 1
-    else:
-        #print str(id) + ' ' + str(referer)
-        c.execute("""INSERT INTO pages values (?,?,?)""", (id[0], referer, loadtime))
-
-    connect.commit()
+def total_page_views():
+    c.execute(""" SELECT * from pages """)
+    return len(c.fetchall())
+    
+def page_views(page):
+    c.execute(" SELECT * from pages where page = '" + page + "'")
+    return len(c.fetchall())
        
 def process_database():
     global next_id
@@ -170,6 +145,10 @@ def print_database():
     
 init()        
 process_file(filename, image_src)
+num_users()
+print total_page_views()
+print page_views("http://www.yahoo.com")
+print page_views("http://www.bbc.com")
 #process_database()
 
 c.close()
