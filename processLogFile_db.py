@@ -63,8 +63,8 @@ def process_file(filename, img_src):
             
             #print page_data
             update_database(page_data)
-        else:
-            print 'REJECTING ' + log_line
+        #else:
+            #print 'REJECTING ' + log_line
     file.close()
             
 def get_values(bug, img_src):
@@ -88,21 +88,26 @@ def update_database(page_values):
 
 
 def num_users():
-    c.execute(""" SELECT COUNT(*) DISTINCT user from pages""")
-
+    c.execute("""SELECT COUNT(DISTINCT user) from pages""")
+    return c.fetchone()[0]
+    
     # check the speed diff between these two
     #c.execute(""" SELECT DISTINCT user from pages """)
-    #users = c.fetchall()
-
-    return len(users)
+    #return len(c.fetchall())
 
 def total_page_views():
-    c.execute(""" SELECT * from pages """)
-    return len(c.fetchall())
+    c.execute("""SELECT COUNT(DISTINCT page) from pages""")
+    return c.fetchone()[0]
+
+    #c.execute(""" SELECT * from pages """)
+    #return len(c.fetchall())
     
 def page_views(page):
-    c.execute(" SELECT * from pages where page = '" + page + "'")
-    return len(c.fetchall())
+    c.execute("SELECT COUNT(*) from pages where page = '" + page + "'")
+    return c.fetchone()[0]
+
+    #c.execute(" SELECT * from pages where page = '" + page + "'")
+    #return len(c.fetchall())
 
 def process_database2():
     global num_top_pages
@@ -185,7 +190,7 @@ def calc_standard_dev(values, average):
 
         return math.sqrt(sum/(len(values)-1))
 
-def calc_bounce_rate():
+#def calc_bounce_rate():
     
         
 def print_database():
@@ -195,12 +200,15 @@ def print_database():
     
 init()        
 process_file(filename, image_src)
-num_users()
-print total_page_views()
-print page_views("http://www.yahoo.com")
-print page_views("http://www.bbc.com")
-print page_views("http://www.dictionary.com")
-process_database2()
+
+#print "len(c.fetchall()) WAY"
+print "COUNT() WAY"
+print 'num users = ' + str(num_users())
+print 'total views = ' + str(total_page_views())
+print 'yahoo.com: ' + str(page_views("http://www.yahoo.com"))
+print 'bbc.com: ' + str(page_views("http://www.bbc.com"))
+print 'time.com: ' + str(page_views("http://www.time.com"))
+#process_database2()
 
 c.close()
 
