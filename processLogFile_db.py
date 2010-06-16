@@ -9,33 +9,34 @@ num_top_pages = int(num_top_pages)
 connect = sqlite3.connect('pages.sqlite')
 c = connect.cursor()
 
-table_cols = {'user':'STRING', 'page':'STRING', 'loadtime':'INTEGER', 'locale':'STRING', 'referer':'STRING', 'timestamp':'INTEGER', 'useragent':'STRING'}
+#table_cols2 = {'user':'STRING', 'page':'STRING', 'loadtime':'INTEGER', 'locale':'STRING', 'referer':'STRING', 'timestamp':'INTEGER', 'useragent':'STRING'}
+cols_n_type = [('user', 'STRING'), ('page', 'STRING'), ('loadtime', 'INTEGER'), ('locale', 'STRING'), ('referer', 'STRING'), ('timestamp', 'INTEGER'), ('useragent', 'STRING')]
+table_cols = 'user, page, loadtime, locale, referer, timestamp, useragent'
 
 def init():
     # delete table and indicies
-    keys = table_cols.keys()
     c.execute(""" DROP TABLE IF EXISTS pages;""")
-    for col in keys:
-       c.execute("DROP INDEX IF EXISTS " + col + "_index;")
 
+    for i in range(0, len(cols_n_type)):
+        c.execute("DROP INDEX IF EXISTS " + cols_n_type[i][0] + "_index;")
+    
     connect.commit()
 
     # create string for fields and types
-    count = 0
     columns = []
-    
-    for col in keys:
-        col_type = col + ' ' + table_cols[col]
+    for i in range(0, len(cols_n_type)):
+        col_type = cols_n_type[i][0] + ' ' + cols_n_type[i][1]
         columns.append(col_type)
+
     values = ', '.join(columns)
-        
 
     # create table and an index for each column
     c.execute("CREATE TABLE IF NOT EXISTS pages(" + values + ");")
-    for col in keys:
-       c.execute("CREATE INDEX IF NOT EXISTS " + col+ "_index ON pages(" + col + ");")
+    for i in range(0, len(cols_n_type)):
+        col = cols_n_type[i][0]
+        c.execute("CREATE INDEX IF NOT EXISTS " + col + "_index ON pages(" + col + ");")
 
-    connect.commit()
+    connect.commit()    
 
 def get_input():
     filename = rawinput("Enter log file: ")
@@ -77,15 +78,16 @@ def get_values(bug, img_src):
 # ------------------------------------------------------------
 
 def update_database(page_values):
-    keys = table_cols.keys()
+    global table_cols
     values = []
 
-    for col in keys:
-        values.append(page_values[col])
-        
-    c.execute("""INSERT INTO pages values (?,?,?,?,?,?,?)""", (values))
+    for i in range(0, len(cols_n_type)):
+        col = cols_n_type[i][0]
+        value = page_values[col]
+        values.append(value)
+    
+    c.execute("INSERT INTO pages (" + table_cols + ") values (?,?,?,?,?,?,?)", (values))
     connect.commit()
-
 
 def num_users():
     c.execute("""SELECT COUNT(DISTINCT user) from pages""")
@@ -96,7 +98,7 @@ def num_users():
     #return len(c.fetchall())
 
 def total_page_views():
-    c.execute("""SELECT COUNT(DISTINCT page) from pages""")
+    c.execute("""SELECT COUNT(*) from pages""")
     return c.fetchone()[0]
 
     #c.execute(""" SELECT * from pages """)
@@ -202,7 +204,7 @@ init()
 process_file(filename, image_src)
 
 #print "len(c.fetchall()) WAY"
-print "COUNT() WAY"
+#print "COUNT() WAY"
 print 'num users = ' + str(num_users())
 print 'total views = ' + str(total_page_views())
 print 'yahoo.com: ' + str(page_views("http://www.yahoo.com"))
