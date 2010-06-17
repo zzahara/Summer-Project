@@ -1,12 +1,12 @@
 import re
+import sys
 from sys import argv
 
-script, filename = argv
+argv
 fields = ['user', 'page', 'loadtime', 'locale', 'referrer', 'timestamp', 'useragent']
 
-def process_file(filename, img_src):
-    file = open(filename, "r")
 
+def process_file(file, img_src):
     pattern = '(?P<user>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) [^ ]+ [^ ]+ \[(?P<timestamp>../.../....:..:..:..) .....\] ' + '"GET (?P<bug>' + img_src + '[^"]+)" (?P<status>\d{3}) (?P<size>[^ ]+) "(?P<page>[^"]+)" "(?P<useragent>[^"]+)"'
     c = re.compile(pattern)
 
@@ -24,8 +24,8 @@ def process_file(filename, img_src):
 
             print_page_values(page_data)
             
-        #else:
-         #   print 'REJECTING' + log_line
+        else:
+            sys.stderr.write('REJECTING: ' + log_line + '\n')
 
 
 def get_values(bug, img_src):
@@ -44,4 +44,13 @@ def print_page_values(page_data):
         print page_data[field] + '  ',
     print ''
 
-process_file(filename, 'http://analytics.archive.org/archive.gif')
+
+if len(argv) < 2:
+    file = sys.stdin
+else:
+    file = open(argv[1], "r") 
+    
+process_file(file, 'http://analytics.archive.org/archive.gif')
+
+
+
