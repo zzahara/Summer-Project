@@ -1,5 +1,6 @@
 var startTime = new Date();
 var loadTime = 0.0;
+img_src = "../images/0.gif"
 
 $(document).ready(function() {
     alert("Taking up some load time : )");
@@ -9,9 +10,10 @@ $(document).ready(function() {
     // Get field values
     timeDiff = (new Date().getTimezoneOffset()/60)*(-1); 
     locale = get_locale();
+    referrer = document.referrer
     
     loadtime_img = new Image(100,25);
-    loadtime_img.src = "../images/flower.jpg?loadtime=" + loadTime;
+    loadtime_img.src = img_src + "?loadtime=" + loadTime;
     
     format_bug(loadTime, locale, timeDiff);
 
@@ -19,6 +21,7 @@ $(document).ready(function() {
     console.log("Loadtime = " + loadTime);
     console.log("Time Difference = " + timeDiff);
     console.log("Locale = " + locale);
+    console.log("Referrer = " + referrer);
 });
 
 function format_bug(loadtime, locale, timediff) {
@@ -27,7 +30,7 @@ function format_bug(loadtime, locale, timediff) {
     ret = []
     for (var data in values)
       ret.push(encodeURIComponent(data) + "=" + encodeURIComponent(values[data]));
-   console.log("../images/flower.jpg?" + ret.join("&"));
+   console.log(img_src + "?" + ret.join("&"));
     
     
     
@@ -53,7 +56,7 @@ function get_locale() {
 function format_request(loadtime, locale, timediff) {
 
     values = "loadtime=" + loadtime + "&locale=" + locale + "&timediff=" + timediff;
-    src = "../images/flower.jpg?" + escape(values);
+    src = img_src + "?" + escape(values);
     console.log("src = " + src)
     //document.write(src);
 
@@ -65,6 +68,4 @@ function format_request(loadtime, locale, timediff) {
    console.log(ret.join("&"));
 
 };
-
-
 
