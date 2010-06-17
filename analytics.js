@@ -1,6 +1,6 @@
 var startTime = new Date();
 var loadTime = 0.0;
-img_src = "../images/0.gif"
+img_src = "http://analytics.archive.org/0.gif"
 
 $(document).ready(function() {
     alert("Taking up some load time : )");
