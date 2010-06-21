@@ -1,0 +1,7 @@
+#!/bin/bash +x
+file="$3"
+
+./cut "$1" "$file" | ./drop_first.py > f1
+./cut "$2" "$file" | ./drop_first.py > f2
+
+paste f1 f2 | sort
