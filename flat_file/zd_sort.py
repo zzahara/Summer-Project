@@ -85,7 +85,6 @@ def get_field_list(file):
     
     return field_names
 
-
 # Main
 file = process_args()
 order_by_field(file)
