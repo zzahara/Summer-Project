@@ -3,7 +3,8 @@
 # zahara.docena@gmail.com
 
 # usage: python zd_sort.py -f field [--file] [filename]
-# usage: python zd_sort.py -f field -f field [-n] [field#] [--field] [filename]
+# usage: python zd_sort.py -f field1 -f field2 ... [-n] [field#] [--field] [filename]
+# e.g. python zd_sort.py -f page -f loadtime -n 2 ... (will 1st sort by page, 2nd sort by loadtime numerically for same pages)
 
 import os
 import sys
