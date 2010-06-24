@@ -2,7 +2,7 @@
 # Zahara Docena
 # zahara.docena@gmail.com
 
-# usage: cut -f field [--input] [filename]
+# usage: ./zd_cut.py -f field [--file] [filename]
 
 import os
 import sys
@@ -56,10 +56,7 @@ def cut(field_nums):
 
 file = process_args()
 field_nums = get_field_nums(file)
-
-# use exec
-print str(fields_int)
-cut(file_nums)
+cut(field_nums)
 
 
 
