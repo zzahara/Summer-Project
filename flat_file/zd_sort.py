@@ -2,7 +2,8 @@
 # Zahara Docena
 # zahara.docena@gmail.com
 
-# usage: sort -f field [--file] [filename]
+# usage: python zd_sort.py -f field [--file] [filename]
+# usage: python zd_sort.py -f field -f field [-n] [field#] [--field] [filename]
 
 import os
 import sys
@@ -10,84 +11,75 @@ from sys import argv
 from optparse import OptionParser
 
 argv
-field = ''  
+file
 fileanme = ''
+sort_fields = []
 parser = OptionParser()
 
 def process_args():
-    global argv, parser, field, filename
-    parser.add_option("-f", action="store", dest="field")
+    global argv, parser, file, filename, sort_fields
+    parser.add_option("-f", action="append", dest="fields")
+    parser.add_option("-n", action="store", dest="numeric", default=-2)
     parser.add_option("--file", action="store", dest = "file")    
     
     (options, args) = parser.parse_args(argv)
-    field = options.field
-    filename = options.file
-
+    sort_fields = options.fields
+    
     if options.file != None:
         filename = options.file
-        return open(options.file, "r")
+        file = open(options.file, "r")
 
     else:
         filename = sys.stdin
-        return sys.stdin
+        file = sys.stdin
+
+    print 'options.numeric = ' + str(options.numeric)
+
+    return options
 
 
-def order_by_field345(file):
-    field_list = get_field_list(file)
-    field_num = field_list.index(str(field)) + 1
-    
-    # cut order field
-    f = open('cut_one','w')
-    f.close()
+def get_field_nums(options):
+    global file, sort_fields, filename
 
-    # cut all except order field
-    before = field_num - 1
-    after = field_num + 1
-    other_fields = ''
-    
-    if before > 0:
-        other_fields = '-' + str(before)
-    if after < len(field_list):
-        if before > 0:
-            other_fields = other_fields + ','
-        other_fields = other_fields + str(after) + '-'
-    
-
-  
-    args = ["cut", str(field_num), filename, "|", "cut", other_fields,]
-    ret_code = subprocess.Popen(args, shell=True)
-    print 'ret_code = ' + str(ret_code)
-    #os.execl("cut", '', str(field_num), filename, '>', 'cut_one')
-
-    
-
-def order_by_field(file):
-    field_list = get_field_list(file)
-    field_num = field_list.index(str(field)) + 1
-  
-    # cut all except order field
-    before = field_num - 1
-    after = field_num + 1
-    other_fields = ''
-    
-    if before > 0:
-        other_fields = '-' + str(before) + ','
-        
-    if after < len(field_list):
-        other_fields = other_fields + str(after) + '-'
-
-    os.execl("sort", '', str(field_num), other_fields, filename)
-    
-def get_field_list(file):
-    global field
     first_line = file.readline()
     field_names = first_line.split('\t')
-    
+
+    script_args = []
+    script_args.append('')
+    length = len(sort_fields)
+
+    for i in range(0, length):
+        index = field_names.index(sort_fields[i])
+        print sort_fields[i] + " = " + str(index)
+        
+        other_option = ''
+        if int(options.numeric) == i+1:
+            other_option = 'n'
+
+        if length > 1 and i != length-1:
+            script_args.append('-k')
+            script_args.append(str(index+1) + ',' + str(index+1) + other_option)
+
+        else:
+            script_args.append('-k')
+            script_args.append(str(index+1) + other_option)
+
+    script_args.append(filename)
+    return script_args
+
+def get_field_list(file):
+    first_line = file.readline()
+    field_names = first_line.split('\t')
+
+    print field_names
     return field_names
 
-# Main
-file = process_args()
-order_by_field(file)
-sort()
+def sort(script_args):
+    os.execv("sort", script_args)
 
+
+# Main
+options = process_args()
+script_args = get_field_nums(options)
+sort(script_args)
 
