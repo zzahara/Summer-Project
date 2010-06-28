@@ -66,7 +66,6 @@ def process_file(options):
     loadtime = field_list.index('loadtime')
 
     curr_page = ''
-    new_page = True
     loadtimes = []
     saved_lines = []
 
@@ -91,7 +90,6 @@ def process_file(options):
             print_lines(saved_lines, stats)
 
             # store new page's values
-            new_page = True
             curr_page = log_data[page]
             loadtimes = []
             saved_lines = []
@@ -194,10 +192,12 @@ def calc_tp99(values, percentile):
 
     group_len = ((percentile/float(100)) * len(values))
 
-    # round up
-    if group_len > int(group_len):
-        group_len = int(group_len) + 1
-    
+    # round accordingly
+    if group_len < 1:
+        group_len = 1
+    else:
+        group_len = int(round(group_len))
+
     for i in range(0, group_len):
         group.append(values[i])
 
@@ -231,12 +231,12 @@ def calc_standard_dev(values, average):
     
 
 # Main
-options = process_args()
-process_file(options)
+#options = process_args()
+#process_file(options)
 
 
-#values = [2, 35, 543, 21, 1, 8, 42, 45, 16, 3, 79, 679]
-#calc_tp99(values, 90)
+values = [2, 35, 543, 21, 1, 8, 42, 45, 16, 3, 79, 679]
+calc_tp99(values, 90)
 
 
 
