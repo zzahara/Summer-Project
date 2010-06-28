@@ -34,8 +34,6 @@ def process_args():
         filename = sys.stdin
         file = sys.stdin
 
-    print 'options.numeric = ' + str(options.numeric)
-
     return options
 
 
@@ -51,7 +49,7 @@ def get_field_nums(options):
 
     for i in range(0, length):
         index = field_names.index(sort_fields[i])
-        print sort_fields[i] + " = " + str(index)
+        #print sort_fields[i] + " = " + str(index)
         
         other_option = ''
         if int(options.numeric) == i+1:
@@ -72,7 +70,6 @@ def get_field_list(file):
     first_line = file.readline()
     field_names = first_line.split('\t')
 
-    print field_names
     return field_names
 
 def sort(script_args):
