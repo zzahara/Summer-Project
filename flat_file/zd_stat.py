@@ -24,10 +24,13 @@ def process_args():
 
     global argv, parser, file
     parser.add_option("-f", "--file", action="store", dest="file", help="read from FILE") 
-    parser.add_option("-t", action="store_true", dest="tp99", help="calculates tp99")
-    parser.add_option("-a", action="store_true", dest="ave_load", help="calculates average load time")
-    parser.add_option("-b", action="store_true", dest="bounce_rate", help="calculates bounce rate")
-    parser.add_option("-s", action="store_true", dest="standard_dev", help="calculates standard deviation")
+    parser.add_option("-c", action="store", dest="count", help="counts the size of each group", default="-")
+    parser.add_option("-t", action="store", dest="tp99", help="calculates tp99", default="-")
+    parser.add_option("-a", action="store", dest="ave_load", help="calculates average load time", default="-")
+    parser.add_option("-b", action="store", dest="bounce_rate", help="calculates bounce rate", default="-")
+    parser.add_option("-s", action="store", dest="standard_dev", help="calculates standard deviation", default="-")
+    parser.add_option("-g", action="append", dest="grouping", help="calculates the statistics on the given grouping")
+    parser.add_option("-d", action="store", dest="data", help="calculates the statistics of these values", default="loadtime")
  
     (options, args) = parser.parse_args(argv)
     parserOptions = options
@@ -42,133 +45,141 @@ def process_args():
 
     return options
 
-def get_loadtimes():
-    global file
-    loadtimes = []
-    field_list = get_field_list()
-
-    index = field_list.index('loadtime')
-
-    for log_line in file:
-        fields = log_line.split('\t')
-        loadtimes.append(int(fields[index]))
-
-    print loadtimes
-    return loadtimes
-
 
 def process_file(options):
     global file
     field_list = get_field_list()
     print_fields(field_list)
+
+    # store the indexes of grouping fields
+    grouped_by = []
+    for field in options.grouping:
+        grouped_by.append(field_list.index(field))
     
-    page = field_list.index('page')
-    loadtime = field_list.index('loadtime')
+    data_field = field_list.index(options.data)
 
-    curr_page = ''
-    loadtimes = []
-    saved_lines = []
-
+    current = [] # current field values of the current group
+    data = [] # data the statistics will be computed over
+    saved_lines = [] # log lines in the current group
 
     for log_line in file:
         log_data = log_line.split('\t')
 
-        if curr_page == '':
-            curr_page = log_data[page]
+        # first group
+        if len(current) == 0:
+            current = get_current(log_data, grouped_by)
 
-        # same page
-        if log_data[page] == curr_page:
-            loadtimes.append(log_data[loadtime])
-            saved_lines.append(log_line)
+        if (in_group(log_data, grouped_by, current)):
+            data.append(log_data[data_field])
+            saved_lines.append(log_line)   
 
-        # new page, so calculate stats for current page
+        # end of group so calculate stats
         else:
-            #print curr_page
-            #print loadtimes
-            
-            stats = calculate_stats(options, loadtimes)
+            #print ' ',
+            #print data
+            stats = calculate_stats(options, data)
             print_lines(saved_lines, stats)
 
-            # store new page's values
-            curr_page = log_data[page]
-            loadtimes = []
+            # store new group's values
+            current = get_current(log_data, grouped_by)
+            data = []
             saved_lines = []
 
-            loadtimes.append(log_data[loadtime])
-            saved_lines.append(log_line)
+            data.append(log_data[data_field])
+            saved_lines.append(log_line)  
 
-    stats = calculate_stats(options, loadtimes)
+    stats = calculate_stats(options, data)
     print_lines(saved_lines, stats)
 
     file.close()
+    
+
+# gets the field values of the current group
+def get_current(log_data, grouped_by):
+    current = []
+
+    for field_index in grouped_by:
+        value = log_data[field_index]
+        current.append(value)
+
+    #print current
+    return current
+
+# verifies if a log line belongs in the current group
+def in_group(log_data, grouped_by, current):
+    i = 0
+    for field_num in grouped_by:
+
+        if log_data[field_num] != current[i]:
+            return False
+            
+        i = i + 1
+
+    return True
+
+
+# ------------------------------------------------------------
+#                Printing Functions
+# ------------------------------------------------------------  
+
+def print_fields(options, fields):
+    stats = []
+
+    stats.append
 
 def print_fields(fields):
-    stats = dict()
+    stats = []
 
-    if options.tp99:
-        stats['tp99'] = 0
+    if options.tp99 != '-':
+        stats.append(options.tp99)
 
-    if options.ave_load:
-        stats['ave_load'] = 0
+    if options.ave_load != '-':
+        stats.append(options.ave_load)
     
-    if options.standard_dev:
-        stats['standard_dev'] = 0
+    if options.standard_dev != '-':
+        stats.append(options.standard_dev)
+
+    if options.count != '-':
+        stats.append(options.count)
 
     for i in range(0, len(fields)-1):
         print fields[i],
         print '\t',
 
-    keys = stats.keys()
-
-    for i in range(0, len(keys)):
-        print keys[i],
-
-        if i != len(keys)-1:
+    for i in range(0, len(stats)):
+        print stats[i],
+        
+        if i != len(stats)-1:
             print '\t',
 
-    print ' '
-   
+    print ''
 
-def calculate_stats(options, loadtimes):
-    stats = dict()
-    if options.tp99:
-        tp99 = calc_tp99(loadtimes)
-        #print tp99
-        stats['tp99'] = tp99
-
-    if options.ave_load:
-        ave_load = calc_ave(loadtimes)
-        #print ave_load
-        stats['ave_load'] = ave_load
-    
-    if options.standard_dev:
-        ave_load = calc_ave(loadtimes)
-        standard_dev = calc_standard_dev(loadtimes, ave_load)
-        #print standard_dev
-        stats['standard_dev'] = standard_dev
-
-
-    #print stats
-    return stats
 
 def print_lines(lines, stats):
 
     for log in lines:
         print log.rstrip(),
 
-        keys = stats.keys()
-        for i in range(0, len(keys)):
-            print stats[keys[i]],
+        #keys = stats
+        for i in range(0, len(stats)):
+            print stats[i],
 
-            if i != len(keys)-1:
+            if i != len(stats)-1:
                 print '\t',
-            
-    
-        #for key in stats.keys():
-         #   print stats[key],
-         #   print '\t',
 
+        print ''
 
+def print_lines1(lines, stats):
+
+    for log in lines:
+        print log.rstrip(),
+
+        for i in range(0, len(stats)):
+            print stats[i]
+
+            if i != len(stats)-1:
+                print '\t',
+          
         print ''
  
 
@@ -180,14 +191,34 @@ def get_field_list():
     return field_names
 
 # ------------------------------------------------------------
-#                     Calculating Functions
+#                Calculating Statistics Functions
 # ------------------------------------------------------------  
 
+def calculate_stats(options, values):
+    stats = []
+    if options.tp99 != '-':
+        tp99 = calc_tp99(values, 10)
+        #print tp99
+        stats.append(tp99)
+
+    if options.ave_load != '-':
+        ave_load = calc_ave(values)
+        #print ave_load
+        stats.append(ave_load)
+    
+    if options.standard_dev != '-':
+        standard_dev = calc_standard_dev(values)
+        #print standard_dev
+        stats.append(standard_dev)
+
+    if options.count != '-':
+        stats.append(len(values))
+
+    return stats
 
 #def calc_tp99(values, field):
 
 def calc_tp99(values, percentile):
-    values.sort()
     group = []
 
     group_len = ((percentile/float(100)) * len(values))
@@ -200,9 +231,10 @@ def calc_tp99(values, percentile):
 
     for i in range(0, group_len):
         group.append(values[i])
+        
 
-    print group
-    print calc_ave(group)
+    #print group
+    #print calc_ave(group)
     return calc_ave(group)
     
 def calc_ave(values):
@@ -214,7 +246,8 @@ def calc_ave(values):
 
     return sum/len(values)
 
-def calc_standard_dev(values, average):
+def calc_standard_dev(values):
+    average = calc_ave(values)
     sum = 0.0
 
     if len(values) <= 1:
@@ -227,16 +260,15 @@ def calc_standard_dev(values, average):
 
         return math.sqrt(sum/(len(values)-1))
 
+
 #def calc_bounce_rate():
     
 
 # Main
-#options = process_args()
-#process_file(options)
+options = process_args()
+process_file(options)
 
 
-values = [2, 35, 543, 21, 1, 8, 42, 45, 16, 3, 79, 679]
-calc_tp99(values, 90)
-
-
+#values = [2, 35, 543, 21, 1, 8, 42, 45, 16, 3, 79, 679]
+#calc_tp99(values, 90)
 
