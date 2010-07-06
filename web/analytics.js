@@ -10,8 +10,6 @@ var loadTime = 0.0;
 img_src = "analytics.archive.org/0.gif"
 
 $(document).ready(function() {
-    alert("Taking up some load time : )");
-
     var endTime = new Date();
     values = []
     values['loadTime'] = ((endTime.getTime() - startTime.getTime())/100)/10;
