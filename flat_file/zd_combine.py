@@ -3,6 +3,8 @@
 # zahara@archive.org
 # zahara.docena@gmail.com
 
+# combines fields into a new field, useful for computing bounce rate
+
 import os
 import sys
 from sys import argv
