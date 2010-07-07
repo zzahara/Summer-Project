@@ -7,7 +7,7 @@
 
 var startTime = new Date();
 var loadTime = 0.0;
-img_src = "analytics.archive.org/0.gif"
+img_src = "http://analytics.archive.org/0.gif"
 
 
 window.onload = function() {
