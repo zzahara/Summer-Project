@@ -14,14 +14,11 @@ from sys import argv
 from optparse import OptionParser
 
 argv
-file
-fileanme = ''
 parser = OptionParser()
 
 
 def process_args():
-    global argv, parser, file
-    parser.add_option("-f", "--file", action="store", dest="file", help="read from FILE") 
+    global argv, parser
     parser.add_option("-c", action="store", dest="count", help="counts the size of each group", default="-")
     parser.add_option("-t", action="store", dest="tp99", help="calculates tp99", default="-")
     parser.add_option("-a", action="store", dest="ave_load", help="calculates average load time", default="-")
@@ -33,19 +30,10 @@ def process_args():
     (options, args) = parser.parse_args(argv)
     parserOptions = options
 
-    if options.file != None:
-        filename = options.file
-        file = open(options.file, "r")
-
-    else:
-        filename = sys.stdin
-        file = sys.stdin
-
     return options
 
 
 def process_file(options):
-    global file
     field_list = get_field_list()
     print_fields(field_list)
 
@@ -60,7 +48,7 @@ def process_file(options):
     data = [] # data the statistics will be computed over
     saved_lines = [] # log lines in the current group
 
-    for log_line in file:
+    for log_line in sys.stdin:
         log_data = log_line.split('\t')
 
         # first group
@@ -89,8 +77,6 @@ def process_file(options):
     stats = calculate_stats(options, data)
     print_lines(saved_lines, stats)
 
-    file.close()
-    
 
 # gets the field values of the current group
 def get_current(log_data, grouped_by):
@@ -164,8 +150,7 @@ def print_lines(lines, stats):
         print ''
 
 def get_field_list():
-    global file
-    first_line = file.readline()
+    first_line = sys.stdin.readline()
     first_line = first_line.rstrip('\n')
     field_names = first_line.split('\t')
     
@@ -241,15 +226,8 @@ def calc_standard_dev(values):
 
         return math.sqrt(sum/(len(values)-1))
 
-
-#def calc_bounce_rate():
-    
-
 # Main
 options = process_args()
 process_file(options)
 
-
-#values = [2, 35, 543, 21, 1, 8, 42, 45, 16, 3, 79, 679]
-#calc_tp99(values, 90)
 
