@@ -12,8 +12,7 @@ from sys import argv
 from optparse import OptionParser
 
 argv
-file
-fileanme = ''
+first_line = ''
 sort_fields = []
 parser = OptionParser()
 
@@ -21,27 +20,15 @@ def process_args():
     global argv, parser, file, filename, sort_fields
     parser.add_option("-f", action="append", dest="fields")
     parser.add_option("-n", action="store", dest="numeric", default=-2)
-    parser.add_option("--file", action="store", dest = "file")    
     
     (options, args) = parser.parse_args(argv)
     sort_fields = options.fields
-    
-    if options.file != None:
-        filename = options.file
-        file = open(options.file, "r")
-
-    else:
-        filename = sys.stdin
-        file = sys.stdin
 
     return options
 
-
 def get_field_nums(options):
-    global file, sort_fields, filename
-
-    first_line = file.readline()
-    field_names = first_line.split('\t')
+    global sort_fields, filename
+    field_names = get_field_list()
 
     script_args = []
     script_args.append('')
@@ -63,21 +50,30 @@ def get_field_nums(options):
             script_args.append('-k')
             script_args.append(str(index+1) + other_option)
 
-    script_args.append(filename)
     return script_args
 
-def get_field_list(file):
-    first_line = file.readline()
+def get_field_list():
+    global first_line
+
+    char = os.read(0,1)
+    first_line = ''
+    
+    while char != '\n':
+        first_line = first_line + char
+        char = os.read(0,1)
+
+    
     field_names = first_line.split('\t')
 
     return field_names
 
 def sort(script_args):
-    os.execv("sort", script_args)
+    global first_line
+    os.write(1,first_line + '\n')
+    os.execv("sort-wrapper", script_args)
 
 
 # Main
 options = process_args()
 script_args = get_field_nums(options)
 sort(script_args)
-
