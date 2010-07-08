@@ -1,5 +1,6 @@
 # Contact Info:
 # Zahara Docena
+# zahara@archive.org
 # zahara.docena@gmail.com
 
 # usage: zd_stat 
@@ -19,9 +20,6 @@ parser = OptionParser()
 
 
 def process_args():
-
-    # sort by page first
-
     global argv, parser, file
     parser.add_option("-f", "--file", action="store", dest="file", help="read from FILE") 
     parser.add_option("-c", action="store", dest="count", help="counts the size of each group", default="-")
@@ -69,12 +67,11 @@ def process_file(options):
         if len(current) == 0:
             current = get_current(log_data, grouped_by)
 
-        if (in_group(log_data, grouped_by, current)):
+        if in_group(log_data, grouped_by, current):
             data.append(log_data[data_field])
-            saved_lines.append(log_line)   
-
-        # end of group so calculate stats
+            saved_lines.append(log_line)           
         else:
+            # end of group so calculate stats
             #print ' ',
             #print data
             stats = calculate_stats(options, data)
@@ -88,6 +85,7 @@ def process_file(options):
             data.append(log_data[data_field])
             saved_lines.append(log_line)  
 
+    # last group
     stats = calculate_stats(options, data)
     print_lines(saved_lines, stats)
 
@@ -122,10 +120,6 @@ def in_group(log_data, grouped_by, current):
 #                Printing Functions
 # ------------------------------------------------------------  
 
-def print_fields(options, fields):
-    stats = []
-
-    stats.append
 
 def print_fields(fields):
     stats = []
@@ -142,7 +136,7 @@ def print_fields(fields):
     if options.count != '-':
         stats.append(options.count)
 
-    for i in range(0, len(fields)-1):
+    for i in range(0, len(fields)):
         print fields[i],
         print '\t',
 
@@ -169,23 +163,10 @@ def print_lines(lines, stats):
 
         print ''
 
-def print_lines1(lines, stats):
-
-    for log in lines:
-        print log.rstrip(),
-
-        for i in range(0, len(stats)):
-            print stats[i]
-
-            if i != len(stats)-1:
-                print '\t',
-          
-        print ''
- 
-
 def get_field_list():
     global file
     first_line = file.readline()
+    first_line = first_line.rstrip('\n')
     field_names = first_line.split('\t')
     
     return field_names
