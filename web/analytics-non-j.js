@@ -17,8 +17,6 @@ function addLoadEvent(func) {
 };
 
 addLoadEvent(function() {
-    alert("Taking up some load time : )");
-    
     var endTime = new Date();
     values = []
     values['loadTime'] = ((endTime.getTime() - startTime.getTime())/100)/10;
