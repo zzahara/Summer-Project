@@ -1,16 +1,24 @@
-/* 
-* Contact Info:
-* Zahara Docena
-* zahara.docena@gmail.com
-* zahara@archive.org
-*/
 
 var startTime = new Date();
 var loadTime = 0.0;
 img_src = "http://analytics.archive.org/0.gif"
 
+function addLoadEvent(func) {
+    var oldOnload = window.onload;
 
-window.onload = function() {
+    if (typeof window.onload != 'function') {
+        window.onload = func;
+    } else {
+        window.onload = function() {
+            func()
+            oldOnload();
+        }   
+    }
+};
+
+addLoadEvent(function() {
+    alert("Taking up some load time : )");
+    
     var endTime = new Date();
     values = []
     values['loadTime'] = ((endTime.getTime() - startTime.getTime())/100)/10;
@@ -25,7 +33,7 @@ window.onload = function() {
 
     loadtime_img = new Image(100,25);
     loadtime_img.src = img_src + "?" + string;
-};
+});
 
 
 function format_bug(values) {
@@ -52,5 +60,4 @@ function get_locale() {
     }
 
 };
-
 
