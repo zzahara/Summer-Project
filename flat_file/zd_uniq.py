@@ -80,7 +80,7 @@ def get_current(log_data, grouped_by):
 
 def get_field_list():
     first_line = sys.stdin.readline()
-    first_line = first_line.rstrip('\n')
+    first_line = first_line.rstrip()
     
     print first_line
     return first_line.split('\t')

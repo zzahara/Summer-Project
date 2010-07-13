@@ -48,6 +48,7 @@ def get_field_list():
         first_line = first_line + char
         char = os.read(0,1)
 
+    first_line = first_line.rstrip()
     field_names = first_line.split('\t')
 
     return field_names

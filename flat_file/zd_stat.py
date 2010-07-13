@@ -138,9 +138,8 @@ def print_fields(fields):
 def print_lines(lines, stats):
 
     for log in lines:
-        print log.rstrip(),
+        print log.rstrip() + '\t',
 
-        #keys = stats
         for i in range(0, len(stats)):
             print stats[i],
 
@@ -151,7 +150,7 @@ def print_lines(lines, stats):
 
 def get_field_list():
     first_line = sys.stdin.readline()
-    first_line = first_line.rstrip('\n')
+    first_line = first_line.rstrip()
     field_names = first_line.split('\t')
     
     return field_names

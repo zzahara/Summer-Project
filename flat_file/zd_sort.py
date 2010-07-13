@@ -28,15 +28,14 @@ def process_args():
 
 def get_field_nums(options):
     global sort_fields, filename
-    field_names = get_field_list()
+    field_list = get_field_list()
 
     script_args = []
     script_args.append('')
     length = len(sort_fields)
 
     for i in range(0, length):
-        index = field_names.index(sort_fields[i])
-        #print sort_fields[i] + " = " + str(index)
+        index = field_list.index(sort_fields[i])
         
         other_option = ''
         if int(options.numeric) == i+1:
@@ -61,8 +60,8 @@ def get_field_list():
     while char != '\n':
         first_line = first_line + char
         char = os.read(0,1)
-
     
+    first_line = first_line.rstrip()
     field_names = first_line.split('\t')
 
     return field_names
