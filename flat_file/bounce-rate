@@ -1,0 +1,4 @@
+#!/bin/bash +x
+cat $1 | python zd_combine.py -n user -c user -c useragent | python zd_sort.py -f user -f page | python zd_uniq.py -f user -f page > tempBounceRateFile
+cat tempBounceRateFile | wc -l
+cat tempBounceRateFile | python zd_stat.py -c count -g user | python zd_select.py $2 | wc -l
