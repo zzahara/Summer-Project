@@ -27,7 +27,6 @@ addLoadEvent(function() {
     values['referrer'] = document.referrer
 
     string = format_bug(values);
-    console.log(string)
 
     loadtime_img = new Image(100,25);
     loadtime_img.src = img_src + "?" + string;
