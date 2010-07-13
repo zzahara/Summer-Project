@@ -1,24 +1,11 @@
-archive_analytics.namespace("non_jquery")
-archive_analytics.non_jquery.myModule = function() {
-
-    var startTime = new Date();
-    var loadTime = 0.0;
-    img_src = "http://analytics.archive.org/0.gif"
-
-    function addLoadEvent(func) {
-        var oldOnload = window.onload;
-
-        if (typeof window.onload != 'function') {
-            window.onload = func;
-        } else {
-            window.onload = function() {
-                func()
-                oldOnload();
-            }   
-        }
-    };
-
-    addLoadEvent(function() {
+var archive_analytics = { 
+    startTime: new Date(), 
+    loadtime: 0.0, 
+    img_src: "http://analytics.archive.org/0.gif",
+     
+    onload:  addLoadEvent(function() {
+        alert("Taking up some load time : )");
+    
         var endTime = new Date();
         values = []
         values['loadTime'] = ((endTime.getTime() - startTime.getTime())/100)/10;
@@ -28,22 +15,21 @@ archive_analytics.non_jquery.myModule = function() {
         values['locale'] = get_locale();
         values['referrer'] = document.referrer
 
-        string = format_bug(values);
+        string = this.format_bug(values);
 
         loadtime_img = new Image(100,25);
         loadtime_img.src = img_src + "?" + string;
-    });
-
-
-    function format_bug(values) {
+    }),
+    
+    format_bug: function(values) {
         ret = []
         for (var data in values)
           ret.push(encodeURIComponent(data) + "=" + encodeURIComponent(values[data]));
 
         return ret.join("&")
-    };
+    },
 
-    function get_locale() {
+    get_locale: function() {
         if (navigator) {
             if (navigator.language)
                 return navigator.language;
@@ -56,8 +42,21 @@ archive_analytics.non_jquery.myModule = function() {
 
             else if (navigator.userLanguage)
                 return navigator.userLanguage;
-        }
+    }}
+    }
 
-    };
-}();
+function addLoadEvent(func) {
+    var oldOnload = window.onload;
+
+    if (typeof window.onload != 'function') {
+        window.onload = func;
+    } else {
+        window.onload = function() {
+            func()
+            oldOnload();
+        }   
+    }
+};
+
+archive_analytics.onload
 
