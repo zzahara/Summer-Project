@@ -1,48 +1,53 @@
 var startTime = new Date();
-var loadTime = 0.0;
-img_src = "analytics.archive.org/0.gif"
 
-$(document).ready(function() {
+var archive_analytics = {
+    loadtime: 0, 
+    img_src: "http://analytics.archive.org/0.gif",
+
+    onload_func: function() {
+    //alert("Taking up some load time : )");
+    
     var endTime = new Date();
-    values = []
-    values['loadtime'] = ((endTime.getTime() - startTime.getTime())/100)/10;
-
+    var values = {};
+    
     // Get field values    
+    loadtime = ((endTime.getTime() - startTime.getTime())/100)/10;
+    loadtime = parseInt(loadtime * 1000);
+    
+    values['loadtime'] = loadtime
     values['timediff'] = (new Date().getTimezoneOffset()/60)*(-1); 
-    values['locale'] = get_locale();
-    values['referrer'] = document.referrer
-
-    string = format_bug(values);
-    console.log(string)
+    values['locale'] = archive_analytics.get_locale();
+    values['referrer'] = document.referrer;
+    
+    string = archive_analytics.format_bug(values);
 
     loadtime_img = new Image(100,25);
-    loadtime_img.src = img_src + "?" + string;
-});
+    loadtime_img.src = archive_analytics.img_src + "?" + string;
+    },
 
+    format_bug: function(values) {
+        ret = []
+        for (var data in values) 
+            ret.push(encodeURIComponent(data) + "=" + encodeURIComponent(values[data]));
+        return ret.join("&");
+    },
 
-function format_bug(values) {
-    ret = []
-    for (var data in values)
-      ret.push(encodeURIComponent(data) + "=" + encodeURIComponent(values[data]));
+    get_locale: function() {
+        if (navigator) {
+            if (navigator.language)
+                return navigator.language;
+                
+            else if (navigator.browserLanguage)
+                return navigator.browserLanguage;
 
-    return ret.join("&")
-};
+            else if (navigator.systemLanguage) 
+                return navigator.systemLanguage;
 
-function get_locale() {
-    if (navigator) {
-        if (navigator.language)
-            return navigator.language;
-            
-        else if (navigator.browserLanguage)
-            return navigator.browserLanguage;
-
-        else if (navigator.systemLanguage) 
-            return navigator.systemLanguage;
-
-        else if (navigator.userLanguage)
-            return navigator.userLanguage;
+            else if (navigator.userLanguage)
+                return navigator.userLanguage;
+    }}
     }
 
-};
+$(window).load(archive_analytics.onload_func)
 
 
