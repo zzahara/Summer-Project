@@ -1,10 +1,3 @@
-/* 
-* Contact Info:
-* Zahara Docena
-* zahara.docena@gmail.com
-* zahara@archive.org
-*/
-
 var startTime = new Date();
 var loadTime = 0.0;
 img_src = "analytics.archive.org/0.gif"
@@ -12,10 +5,10 @@ img_src = "analytics.archive.org/0.gif"
 $(document).ready(function() {
     var endTime = new Date();
     values = []
-    values['loadTime'] = ((endTime.getTime() - startTime.getTime())/100)/10;
+    values['loadtime'] = ((endTime.getTime() - startTime.getTime())/100)/10;
 
     // Get field values    
-    values['timeDiff'] = (new Date().getTimezoneOffset()/60)*(-1); 
+    values['timediff'] = (new Date().getTimezoneOffset()/60)*(-1); 
     values['locale'] = get_locale();
     values['referrer'] = document.referrer
 
@@ -40,7 +33,7 @@ function get_locale() {
         if (navigator.language)
             return navigator.language;
             
-        else if (naviagtor.browserLanguage)
+        else if (navigator.browserLanguage)
             return navigator.browserLanguage;
 
         else if (navigator.systemLanguage) 
