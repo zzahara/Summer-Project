@@ -3,26 +3,24 @@ var startTime = new Date();
 var archive_analytics = {
     loadtime: 0, 
     img_src: "http://analytics.archive.org/0.gif",
-
+    values: {},
+    
     onload_func: function() {
-    //alert("Taking up some load time : )");
-    
-    var endTime = new Date();
-    var values = {};
-    
-    // Get field values    
-    loadtime = ((endTime.getTime() - startTime.getTime())/100)/10;
-    loadtime = parseInt(loadtime * 1000);
-    
-    values['loadtime'] = loadtime
-    values['timediff'] = (new Date().getTimezoneOffset()/60)*(-1); 
-    values['locale'] = archive_analytics.get_locale();
-    values['referrer'] = document.referrer;
-    
-    string = archive_analytics.format_bug(values);
+        var endTime = new Date();
+        
+        // Get field values    
+        loadtime = ((endTime.getTime() - startTime.getTime())/100)/10;
+        loadtime = parseInt(loadtime * 1000);
+        
+        archive_analytics.values['loadtime'] = loadtime
+        archive_analytics.values['timediff'] = (new Date().getTimezoneOffset()/60)*(-1); 
+        archive_analytics.values['locale'] = archive_analytics.get_locale();
+        archive_analytics.values['referrer'] = document.referrer;
+        
+        string = archive_analytics.format_bug(archive_analytics.values);
 
-    loadtime_img = new Image(100,25);
-    loadtime_img.src = archive_analytics.img_src + "?" + string;
+        loadtime_img = new Image(100,25);
+        loadtime_img.src = archive_analytics.img_src + "?" + string;
     },
 
     format_bug: function(values) {
@@ -45,8 +43,9 @@ var archive_analytics = {
 
             else if (navigator.userLanguage)
                 return navigator.userLanguage;
-    }}
+        }
     }
+}
 
 $(window).load(archive_analytics.onload_func)
 
