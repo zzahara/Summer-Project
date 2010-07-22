@@ -1,4 +1,6 @@
 #!/bin/bash +x
-cat $1 | python zd_combine.py -n user -c user -c useragent | python zd_sort.py -f user -f page | python zd_uniq.py -f user -f page > tempBounceRateFile
-cat tempBounceRateFile | wc -l
-cat tempBounceRateFile | python zd_stat.py -c count -g user | python zd_select.py $2 | wc -l
+cat $1 | python zd_combine.py -n user -c user -c useragent | python zd_cut.py -f user -f page | python zd_sort.py -f user -f page | python drop_first.py | uniq | cut -f 1 > tempBounceRateFile
+cat tempBounceRateFile | wc -l > totalLogLines
+cat tempBounceRateFile | uniq -c | sort > bounceLines
+python bounce_rate_alt.py totalLogLines bounceLines
+
