@@ -1,6 +1,5 @@
-# Contact Info:
-# Zahara Docena
-# zahara.docena@gmail.com
+# Written by Zahara Docena
+#!/usr/bin/env python
 
 import re
 import sys
