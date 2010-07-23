@@ -32,8 +32,7 @@ def process_file():
         line = list_to_dict(log_data, field_list)
 
         if include(line):
-            print log_line
-        
+            print log_line        
 
 
 def list_to_dict(log_data, field_list):
@@ -47,7 +46,8 @@ def list_to_dict(log_data, field_list):
 def get_field_list():
     first_line = sys.stdin.readline()
     first_line = first_line.rstrip('\n')
-
+    print first_line
+    
     field_list = first_line.split('\t')
     return strip_spaces(field_list)
 

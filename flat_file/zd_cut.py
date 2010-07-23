@@ -23,26 +23,41 @@ def process_args():
 
 
 def get_script_args():
-
+    global first_line
     field_names = get_field_list()
     field_nums = ''
 
     script_args = ['']
+    indexes = []
 
     for i in range(0, len(cut_fields_str)):
         index = field_names.index(cut_fields_str[i])
+        indexes.append(index)
         field_nums = field_nums + str(index+1)
         
         if i != len(cut_fields_str)-1:
             field_nums = field_nums + ','
 
+    write_first_line(indexes, field_names)
+    
     script_args.append(field_nums)
     return script_args
 
-def get_field_list():
-
-    char = os.read(0,1)
+def write_first_line(indexes, field_list):
     first_line = ''
+    indexes.sort()
+    for i in range(0, len(indexes)):
+        x = indexes[i]
+        os.write(1,field_list[x])
+
+        if i != len(indexes)-1:
+            os.write(1,'\t')   
+
+    os.write(1,'\n')
+
+def get_field_list():
+    first_line = ''
+    char = os.read(0,1)
     
     while char != '\n':
         first_line = first_line + char
