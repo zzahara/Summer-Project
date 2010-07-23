@@ -1,6 +1,5 @@
-# Contact Info:
-# Zahara Docena
-# zahara.docena@gmail.com
+#!/usr/bin/env python
+# Written by Zahara Docena
 
 # usage: python zd_sort.py -f field [--file] [filename]
 # usage: python zd_sort.py -f field1 -f field2 ... [-n] [field#] [--field] [filename]

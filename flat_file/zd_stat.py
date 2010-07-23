@@ -1,8 +1,5 @@
-# Contact Info:
-# Zahara Docena
-# zahara@archive.org
-# zahara.docena@gmail.com
-
+#!/usr/bin/env python
+# Written by Zahara Docena
 # usage: zd_stat 
 # http://www01.us.archive.org/~samuel/access-data.php?datecode=20100621
 

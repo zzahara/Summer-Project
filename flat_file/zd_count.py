@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # Written by Zahara Docena
 
-import re
 import os
 import sys
-import math
 from sys import argv
 from optparse import OptionParser
 
@@ -76,14 +74,13 @@ def get_current(log_data, grouped_by):
     #print current
     return current
 
-
 def get_field_list():
     first_line = sys.stdin.readline()
-    first_line = first_line.rstrip()
-    
-    print first_line
-    return first_line.split('\t')
+    first_line = first_line.rstrip('\n')
 
+    print first_line
+    field_list = first_line.split('\t')
+    return strip_spaces(field_list)
 
 options = process_args()
 process_file(options)

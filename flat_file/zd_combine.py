@@ -1,7 +1,5 @@
-# Contact Info:
-# Zahara Docena
-# zahara@archive.org
-# zahara.docena@gmail.com
+#!/usr/bin/env python
+# Written by Zahara Docena
 
 # combines fields into a new field, useful for computing bounce rate
 

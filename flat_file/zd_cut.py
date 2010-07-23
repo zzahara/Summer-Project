@@ -1,6 +1,5 @@
-# Contact Info:
-# Zahara Docena
-# zahara.docena@gmail.com
+#!/usr/bin/env python
+# Written by Zahara Docena
 
 # usage: ./zd_cut.py -f field [--file] [filename]
 
