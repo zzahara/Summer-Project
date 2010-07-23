@@ -17,7 +17,7 @@ sort_fields = []
 parser = OptionParser()
 
 def process_args():
-    global argv, parser, file, filename, sort_fields
+    global argv, parser, sort_fields
     parser.add_option("-f", action="append", dest="fields")
     parser.add_option("-n", action="store", dest="numeric", default=-2)
     
@@ -27,7 +27,7 @@ def process_args():
     return options
 
 def get_field_nums(options):
-    global sort_fields, filename
+    global sort_fields
     field_list = get_field_list()
 
     script_args = []
