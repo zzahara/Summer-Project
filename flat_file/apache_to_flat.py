@@ -50,12 +50,7 @@ def print_page_values(page_data):
     print ''
 
 
-if len(argv) < 2:
-    file = sys.stdin
-else:
-    file = open(argv[1], "r") 
-    
-process_file(file, '/0.gif')
+process_file(sys.stdin, '/0.gif')
 
 
 
