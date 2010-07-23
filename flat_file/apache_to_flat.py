@@ -46,7 +46,10 @@ def print_fields():
 def print_page_values(page_data):
     for i in range(0, len(fields)):
         field = fields[i]
-        print page_data[field] + '\t',
+        if field in page_data:
+            print page_data[field] + '\t',
+        else:
+            print '-' + '\t',
     print ''
 
 
