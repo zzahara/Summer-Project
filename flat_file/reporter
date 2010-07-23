@@ -1,0 +1,3 @@
+#!/bin/bash +x
+cat $1 | ./bounce-rate
+./top-field $1 page $2
