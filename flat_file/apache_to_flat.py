@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # Written by Zahara Docena
 
-
 import re
 import sys
+import urllib
 from sys import argv
 
 argv
@@ -33,8 +33,8 @@ def process_file(file, img_src):
           #  sys.stderr.write('REJECTING: ' + log_line + '\n')
 
 def get_bug_values(bug, img_src):
-    end = bug.replace(img_src + '?', '')
-    bug_values = dict(item.split("=") for item in end.split("&"))
+    bug = bug.replace(img_src + '?', '')
+    bug_values = dict(item.split("=") for item in bug.split("&"))
 
     return bug_values
 
@@ -46,7 +46,12 @@ def print_fields():
 def print_page_values(page_data):
     for i in range(0, len(fields)):
         field = fields[i]
+
         if field in page_data:
+            if field == 'referrer':
+                page_data[field] = urllib.unquote(page_data[field])
+                page_data[field] = (page_data[field].split())[0]
+        
             print page_data[field] + '\t',
         else:
             print '-' + '\t',
