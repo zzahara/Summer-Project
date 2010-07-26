@@ -8,11 +8,11 @@ from sys import argv
 
 argv
 # fields that will be in the flat file
-fields = ['user', 'page', 'loadtime', 'locale', 'referrer', 'timestamp', 'status', 'useragent']
+fields = ['ip', 'page', 'loadtime', 'locale', 'referrer', 'timestamp', 'status', 'useragent']
 
 # img_src = bug request made on analytics.js
 def process_file(file, img_src):
-    pattern = '(?P<user>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) [^ ]+ [^ ]+ \[(?P<timestamp>../.../....:..:..:..) .....\] ' + '"GET (?P<bug>' + img_src + '\?[^"]+)" (?P<status>\d{3}) (?P<size>[^ ]+) "(?P<page>[^"]+)" "(?P<useragent>[^"]+)"'
+    pattern = '(?P<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) [^ ]+ [^ ]+ \[(?P<timestamp>../.../....:..:..:..) .....\] ' + '"GET (?P<bug>' + img_src + '\?[^ ]+)( HTTP/1\.\d)?" (?P<status>\d{3}) (?P<size>[^ ]+) "(?P<page>[^"]+)" "(?P<useragent>[^"]+)"'
     c = re.compile(pattern)
 
     print_fields()
@@ -50,7 +50,6 @@ def print_page_values(page_data):
         if field in page_data:
             if field == 'referrer':
                 page_data[field] = urllib.unquote(page_data[field])
-                page_data[field] = (page_data[field].split())[0]
 
             print page_data[field] + '\t',
         else:
