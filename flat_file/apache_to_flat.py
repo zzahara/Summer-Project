@@ -51,7 +51,7 @@ def print_page_values(page_data):
             if field == 'referrer':
                 page_data[field] = urllib.unquote(page_data[field])
                 page_data[field] = (page_data[field].split())[0]
-        
+
             print page_data[field] + '\t',
         else:
             print '-' + '\t',
