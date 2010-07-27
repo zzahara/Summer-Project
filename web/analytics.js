@@ -15,8 +15,13 @@ var archive_analytics = {
         archive_analytics.values['loadtime'] = loadtime
         archive_analytics.values['timediff'] = (new Date().getTimezoneOffset()/60)*(-1); 
         archive_analytics.values['locale'] = archive_analytics.get_locale();
-        archive_analytics.values['referrer'] = document.referrer;
-        
+
+        // if no referrer set '-' as referrer
+        if (document.referrer == '')
+            archive_analytics.values['referrer'] = '-';
+        else
+            archive_analytics.values['referrer'] = document.referrer;
+            
         string = archive_analytics.format_bug(archive_analytics.values);
 
         loadtime_img = new Image(100,25);
