@@ -24,9 +24,17 @@ var archive_analytics = {
     },
 
     format_bug: function(values) {
-        ret = []
-        for (var data in values) 
+        ret = [];
+        count = 2;
+        version = 2;
+        
+        for (var data in values) {
             ret.push(encodeURIComponent(data) + "=" + encodeURIComponent(values[data]));
+            count = count + 1;
+        }
+
+        ret.push('version=' + version);
+        ret.push('count=' + count);
         return ret.join("&");
     },
 
