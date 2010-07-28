@@ -24,8 +24,6 @@ def process_args():
 
 def process_file(options):
     field_list = get_field_list()
-    print 'FIELD LIST = '
-    print field_list
 
     # store the indexes of combining fields
     indexes = []
@@ -37,8 +35,6 @@ def process_file(options):
         log_line = log_line.rstrip()
         log_data = log_line.split('\t')
 
-        
-        print log_line
         print_combined(log_data, options.combine, field_list)
         print_other_fields(log_data, options.combine, field_list)
 
@@ -49,8 +45,6 @@ def print_other_fields(log_data, combined, field_list):
             if i != len(field_list)-1:
                 print log_data[i] + '\t',
             else:
-                print i
-                print log_data
                 print log_data[i]
 
         elif i == len(field_list)-1:
@@ -68,13 +62,10 @@ def print_combined(log_data, combine_fields, field_list):
     new_string = ''
 
     for field in combine_fields:
-        print 'field: ' + field
         index = field_list.index(field)
 
-        
         new_string = new_string + log_data[index]
-    print '**************'
-    #print new_string + '\t',
+    print new_string + '\t',
 
 def print_field_line(new_field, combine, field_list):
 

@@ -68,10 +68,12 @@ def print_fields1(fields):
     print ''
 
 def print_fields(fields):
-    for x in fields:
-        print x.rstrip() + '\t',
-    print ''
-    
+    for i in range(0, len(fields)):
+        if i != len(fields)-1:
+            print fields[i] + '\t',
+        else:
+            print fields[i]
+            
 def print_page_values(page_data, fields):
     for i in range(0, len(fields)):
         field = fields[i]
