@@ -32,9 +32,12 @@ def process_file(options):
 
     print_field_line(options.name, options.combine, field_list)
     for log_line in sys.stdin:
-        log_line = log_line.rstrip('\n')
+        log_line = log_line.rstrip()
         log_data = log_line.split('\t')
 
+        
+        print log_line
+        print log_data
         print_combined(log_data, options.combine, field_list)
         print_other_fields(log_data, options.combine, field_list)
 
@@ -63,11 +66,10 @@ def print_combined(log_data, combine_fields, field_list):
 
     for field in combine_fields:
         print 'field: ' + field
-        print field_list
         index = field_list.index(field)
 
         print index
-        print log_data
+        print '**************'
         #new_string = new_string + log_data[index]
 
     #print new_string + '\t',
