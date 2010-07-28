@@ -4,13 +4,13 @@
 import sys
 from sys import argv
 
-file1 = open(argv[1])
-file2 = open(argv[2])
+total_file = open(argv[1])
+flat_file = open(argv[2])
 
-total = float(file1.readline())
+total = float(total_file.readline())
 bounces = 0
 
-for line in file2:
+for line in flat_file:
     line = line.strip()
     
     if line.startswith('1'):
