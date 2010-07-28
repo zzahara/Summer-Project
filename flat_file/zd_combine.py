@@ -65,7 +65,9 @@ def print_combined(log_data, combine_fields, field_list):
         print 'field: ' + field
         print field_list
         index = field_list.index(field)
-        
+
+        print index
+        print log_data
         new_string = new_string + log_data[index]
 
     print new_string + '\t',
