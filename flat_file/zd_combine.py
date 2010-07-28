@@ -37,7 +37,6 @@ def process_file(options):
 
         
         print log_line
-        print log_data
         print_combined(log_data, options.combine, field_list)
         print_other_fields(log_data, options.combine, field_list)
 
@@ -68,7 +67,6 @@ def print_combined(log_data, combine_fields, field_list):
         print 'field: ' + field
         index = field_list.index(field)
 
-        print index
         print '**************'
         #new_string = new_string + log_data[index]
 
