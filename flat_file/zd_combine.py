@@ -62,6 +62,7 @@ def print_combined(log_data, combine_fields, field_list):
     new_string = ''
 
     for field in combine_fields:
+        print field
         index = field_list.index(field)
         new_string = new_string + log_data[index]
 

@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "slowest $2 pages (server_ms):"
+cat $1 | ./zd_sort.py -f page -f server_ms -n 2 | ./zd_stat.py -a ave_serverms -g page -d server_ms | ./zd_sort.py -f ave_serverms -n 1 | ./zd_cut.py -f page -f ave_serverms | ./drop_first.py | uniq | tail -r -n $2
+echo ""
