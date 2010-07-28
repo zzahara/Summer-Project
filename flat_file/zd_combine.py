@@ -24,6 +24,8 @@ def process_args():
 
 def process_file(options):
     field_list = get_field_list()
+    print 'FIELD LIST = '
+    print field_list
 
     # store the indexes of combining fields
     indexes = []
