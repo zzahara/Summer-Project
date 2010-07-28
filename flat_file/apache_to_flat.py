@@ -56,9 +56,9 @@ def process_file(file, img_src, options):
             
         total_lines = total_lines + 1
 
-    print "count didn't match: " + count_no_match
-    print "regex didn't match: " + regex_no_match
-    print "total lines = " + total_lines
+    sys.stderr.write("count didn't match: " + str(count_no_match))
+    sys.stderr.write("regex didn't match: " + str(regex_no_match))
+    sys.stderr.write("total lines = " + str(total_lines))
 
 def get_bug_values(bug, img_src):
     bug_values = cgi.parse_qs(urlparse.urlparse(bug)[4])
