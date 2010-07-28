@@ -95,10 +95,11 @@ def print_field_line(new_field, combine, field_list):
 
 def get_field_list():
     first_line = sys.stdin.readline()
-    first_line = first_line.rstrip('\n')
+    first_line = first_line.rstrip()
 
     field_list = first_line.split('\t')
-    return strip_spaces(field_list)
+    return field_list
+    #return strip_spaces(field_list)
 
 def strip_spaces(list):
     for i in range(0, len(list)):
