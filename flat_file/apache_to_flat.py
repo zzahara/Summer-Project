@@ -28,6 +28,10 @@ def process_file(file, img_src, options):
     pattern = '(?P<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) [^ ]+ [^ ]+ \[(?P<timestamp>../.../....:..:..:..) .....\] ' + '"GET (?P<bug>' + img_src + '\?[^ ]+)( HTTP/1\.\d)?" (?P<status>\d{3}) (?P<size>[^ ]+) "(?P<page>[^"]+)" "(?P<useragent>[^"]+)"'
     c = re.compile(pattern)
 
+    total_lines = 0
+    count_no_match = 0
+    regex_no_match = 0
+    
     print_fields(options.fields)
     for log_line in file:
         m = c.match(log_line)
@@ -43,10 +47,18 @@ def process_file(file, img_src, options):
             if 'count' in bug_values and int(bug_values['count']) == len(bug_values):
                 print_page_values(page_data, options.fields)
             else:
-                sys.stderr.write('COUNT DOES NOT MATCH: ' + log_line + '\n')
+                #sys.stderr.write('COUNT DOES NOT MATCH: ' + log_line + '\n')
+                count_no_match = count_no_match + 1
             
         else:
-            sys.stderr.write('REJECTING: ' + log_line + '\n')
+            #sys.stderr.write('REJECTING: ' + log_line + '\n')
+            regex_no_match = regex_no_match + 1
+            
+        total_lines = total_lines + 1
+
+    print "count didn't match: " + count_no_match
+    print "regex didn't match: " + regex_no_match
+    print "total lines = " + total_lines
 
 def get_bug_values(bug, img_src):
     bug_values = cgi.parse_qs(urlparse.urlparse(bug)[4])
