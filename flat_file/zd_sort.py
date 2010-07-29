@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # Written by Zahara Docena
 
-# usage: python zd_sort.py -f field [--file] [filename]
-# usage: python zd_sort.py -f field1 -f field2 ... [-n] [field#] [--field] [filename]
+# usage: python zd_sort.py -f field 
+# usage: python zd_sort.py -f field1 -f field2 ... [-n] [field#] [-r]
 # e.g. python zd_sort.py -f page -f loadtime -n 2 ... (will 1st sort by page, 2nd sort by loadtime numerically for same pages)
 
 import os
@@ -19,6 +19,8 @@ def process_args():
     global argv, parser, sort_fields
     parser.add_option("-f", action="append", dest="fields")
     parser.add_option("-n", action="store", dest="numeric", default=-2)
+    parser.add_option("-r", action="store_true", dest="reverse", default="store_false")
+    parser.add_option("-g", action="store_true", dest="gen_num", default="store_false")
     
     (options, args) = parser.parse_args(argv)
     sort_fields = options.fields
@@ -48,6 +50,13 @@ def get_field_nums(options):
             script_args.append('-k')
             script_args.append(str(index+1) + other_option)
 
+    if options.reverse:
+        script_args.append('-r')
+
+    if options.gen_num:
+        script_args.append('-g')
+
+    print script_args
     return script_args
 
 def get_field_list():
