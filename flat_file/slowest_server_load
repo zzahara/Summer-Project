@@ -1,5 +1,5 @@
 #!/bin/bash
 echo "slowest $2 pages (server_ms + loadtime):"
-cat $1 | ./zd_cut.py -f page -f server_ms -f loadtime | ./zd_add.py -n server_load_sum -a server_ms -a loadtime | ./zd_sort.py -f page -f server_load_sum -n 2 | ./zd_stat.py -a ave -g page -d server_load_sum | ./zd_sort.py -f ave -n 1 | ./zd_cut.py -f page -f ave | ./drop_first.py | uniq | tail -r -n $2
+cat $1 | ./zd_cut.py -f page -f server_ms -f loadtime | ./zd_add.py -n server_load_sum -a server_ms -a loadtime | ./zd_sort.py -f page -f server_load_sum -n 2 | ./zd_stat.py -a ave -g page -d server_load_sum | ./zd_sort.py -f ave -g -r | ./zd_cut.py -f page -f ave | ./drop_first.py | uniq | tail -n $2
 echo ""
 
