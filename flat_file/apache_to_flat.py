@@ -80,8 +80,17 @@ def print_page_values(page_data, bug_values, fields):
         field = fields[i]
         
         if field in page_data:
+        
             if field in bug_values:
                 page_data[field] = urllib.unquote(page_data[field])
+
+            if '\n' in page_data[field]:
+                page_data[field] = page_data[field].replace('\n', '')
+
+            if '\t' in page_data[field]:
+                page_data[field] = page_data[field].replace('\t', '')
+            
+                
             print page_data[field] + '\t',
         else:
             print '-' + '\t',
@@ -90,7 +99,4 @@ def print_page_values(page_data, bug_values, fields):
 
 options = process_args()
 process_file(sys.stdin, '/0.gif', options)
-
-
-
 
