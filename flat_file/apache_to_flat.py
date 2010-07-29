@@ -45,7 +45,7 @@ def process_file(file, img_src, options):
             page_data.update(bug_values)
 
             if 'count' in bug_values and int(bug_values['count']) == len(bug_values):
-                print_page_values(page_data, options.fields)
+                print_page_values(page_data, bug_values, options.fields)
             else:
                 #sys.stderr.write('COUNT DOES NOT MATCH: ' + log_line + '\n')
                 count_no_match = count_no_match + 1
@@ -68,17 +68,6 @@ def get_bug_values(bug, img_src):
 
     return bug_values
 
-def get_bug_values1(bug, img_src):
-    bug = bug.replace(img_src + '?', '')
-    bug_values = dict(item.split("=") for item in bug.split("&"))
-
-    return bug_values
-
-def print_fields1(fields):
-    for i in range(0, len(fields)):
-        print fields[i] + '\t',
-    print ''
-
 def print_fields(fields):
     for i in range(0, len(fields)):
         if i != len(fields)-1:
@@ -86,30 +75,17 @@ def print_fields(fields):
         else:
             print fields[i]
             
-def print_page_values(page_data, fields):
+def print_page_values(page_data, bug_values, fields):
     for i in range(0, len(fields)):
         field = fields[i]
         
         if field in page_data:
-            page_data[field] = urllib.unquote(page_data[field])
+            if field in bug_values:
+                page_data[field] = urllib.unquote(page_data[field])
             print page_data[field] + '\t',
         else:
             print '-' + '\t',
     print ''     
-
-
-def print_page_values1(page_data):
-    for i in range(0, len(fields)):
-        field = fields[i]
-
-        if field in page_data:
-            #if field == 'referrer':
-            page_data[field] = urllib.unquote(page_data[field])
-
-            print page_data[field] + '\t',
-        else:
-            print '-' + '\t',
-    print ''
 
 
 options = process_args()

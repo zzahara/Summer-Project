@@ -1,5 +1,5 @@
 #!/bin/bash +x
-cat $1 | ./zd_combine.py -n user -c ip -c useragent | ./zd_cut.py -f user -f page | ./zd_sort.py -f user -f page | ./drop_first.py | uniq | cut -f 1 > tempBounceRateFile
+cat $1 | ./zd_combine.py -n user -c ip -c useragent | ./zd_cut.py -f user -f page | ./zd_sort.py -f user -f page | uniq | ./zd_cut.py -f user | ./drop_first.py > tempBounceRateFile
 cat tempBounceRateFile | wc -l > totalLogLines
 cat tempBounceRateFile | uniq -c | sort > bounceLines
 ./bounce_rate_calc.py totalLogLines bounceLines

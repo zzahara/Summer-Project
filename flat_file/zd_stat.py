@@ -18,14 +18,14 @@ def process_args():
     global argv, parser
     parser.add_option("-c", action="store", dest="count", help="counts the size of each group", default="-")
     parser.add_option("-t", action="store", dest="tp99", help="calculates tp99", default="-")
-    parser.add_option("-a", action="store", dest="ave_load", help="calculates average load time", default="-")
+    parser.add_option("-a", action="store", dest="ave", help="calculates average load time", default="-")
     parser.add_option("-b", action="store", dest="bounce_rate", help="calculates bounce rate", default="-")
     parser.add_option("-s", action="store", dest="standard_dev", help="calculates standard deviation", default="-")
     parser.add_option("-g", action="append", dest="grouping", help="calculates the statistics on the given grouping")
     parser.add_option("-d", action="store", dest="data", help="calculates the statistics of these values", default="loadtime")
  
     (options, args) = parser.parse_args(argv)
-    parserOptions = options
+    #parserOptions = options
 
     return options
 
@@ -46,6 +46,7 @@ def process_file(options):
     saved_lines = [] # log lines in the current group
 
     for log_line in sys.stdin:
+        log_line = log_line.rstrip()
         log_data = log_line.split('\t')
 
         # first group
@@ -57,8 +58,6 @@ def process_file(options):
             saved_lines.append(log_line)           
         else:
             # end of group so calculate stats
-            #print ' ',
-            #print data
             stats = calculate_stats(options, data)
             print_lines(saved_lines, stats)
 
@@ -110,8 +109,8 @@ def print_fields(fields):
     if options.tp99 != '-':
         stats.append(options.tp99)
 
-    if options.ave_load != '-':
-        stats.append(options.ave_load)
+    if options.ave != '-':
+        stats.append(options.ave)
     
     if options.standard_dev != '-':
         stats.append(options.standard_dev)
@@ -120,8 +119,7 @@ def print_fields(fields):
         stats.append(options.count)
 
     for i in range(0, len(fields)):
-        print fields[i],
-        print '\t',
+        print fields[i] + '\t',
 
     for i in range(0, len(stats)):
         print stats[i],
@@ -163,10 +161,10 @@ def calculate_stats(options, values):
         #print tp99
         stats.append(tp99)
 
-    if options.ave_load != '-':
-        ave_load = calc_ave(values)
-        #print ave_load
-        stats.append(ave_load)
+    if options.ave != '-':
+        ave = calc_ave(values)
+        #print ave
+        stats.append(ave)
     
     if options.standard_dev != '-':
         standard_dev = calc_standard_dev(values)
@@ -201,12 +199,16 @@ def calc_tp99(values, percentile):
     
 def calc_ave(values):
     sum = 0
-    
     for x in values:
-        val = float(x)
-        sum = sum + val
+        if x != '-':
+            val = float(x)
+            sum = sum + val
 
-    return sum/len(values)
+    ret_val = sum/len(values)
+
+    if ret_val == 0:
+        return '-'
+    return ret_val
 
 def calc_standard_dev(values):
     average = calc_ave(values)
@@ -217,8 +219,9 @@ def calc_standard_dev(values):
 
     else:
         for x in values:
-            val = float(x)
-            sum = sum + math.pow((val-average), 2)
+            if x != '-':
+                val = float(x)
+                sum = sum + math.pow((val-average), 2)
 
         return math.sqrt(sum/(len(values)-1))
 

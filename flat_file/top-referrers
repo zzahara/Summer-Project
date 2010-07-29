@@ -1,0 +1,2 @@
+#!/bin/bash
+cat $1 | python zd_cut.py -f referrer | python drop_first.py | sort | uniq -c | sort -nr | head -n $2
