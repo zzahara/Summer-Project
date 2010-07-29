@@ -45,6 +45,8 @@ def print_other_fields(log_data, combined, field_list):
             if i != len(field_list)-1:
                 print log_data[i] + '\t',
             else:
+                print 'i = ' + str(i)
+                print log_data
                 print log_data[i]
 
         elif i == len(field_list)-1:
