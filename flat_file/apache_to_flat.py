@@ -11,8 +11,6 @@ from optparse import OptionParser
 
 argv
 parser = OptionParser()
-# fields that will be in the flat file
-#fields = ['ip', 'page', 'loadtime', 'locale', 'referrer', 'timestamp', 'status', 'useragent']
 
 def process_args():
     global argv, parser
@@ -51,7 +49,7 @@ def process_file(file, img_src, options):
                 count_no_match = count_no_match + 1
             
         else:
-            #sys.stderr.write('REJECTING: ' + log_line + '\n')
+            #sys.stderr.write('REGEX DOES NOT MATCH: ' + log_line + '\n')
             regex_no_match = regex_no_match + 1
             
         total_lines = total_lines + 1
@@ -76,11 +74,11 @@ def print_fields(fields):
             print fields[i]
             
 def print_page_values(page_data, bug_values, fields):
+
     for i in range(0, len(fields)):
         field = fields[i]
         
-        if field in page_data:
-        
+        if field in page_data and page_data[field].strip() != '':
             if field in bug_values:
                 page_data[field] = urllib.unquote(page_data[field])
 
@@ -90,7 +88,6 @@ def print_page_values(page_data, bug_values, fields):
             if '\t' in page_data[field]:
                 page_data[field] = page_data[field].replace('\t', '')
             
-                
             print page_data[field] + '\t',
         else:
             print '-' + '\t',
