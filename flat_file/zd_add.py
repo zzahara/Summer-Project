@@ -30,8 +30,7 @@ def process_file(options):
     for field in options.add_fields:
         indexes.append(field_list.index(field))
 
-    #print_field_line(options.name, options.add_fields, field_list)
-    print options.name
+    print_field_line(options.name, field_list)
     for log_line in sys.stdin:
         log_line = log_line.rstrip()
         log_data = log_line.split('\t')
@@ -49,28 +48,25 @@ def print_sum(log_data, sum_fields, field_list):
 
     print str(new_sum)
 
+def print_field_line(new_field, field_list):
+    field_list.append(new_field)
+    print '\t'.join(field_list)
 
-def print_field_line(new_field, add_fields, field_list):
+def print_field_line1(new_field, add_fields, field_list):
 
-    if len(field_list) > len(add_fields):
-        print new_field + '\t',
-    else:
-        print new_field
-
+    fields = []
+    fields.append(new_field)
+    
     for i in range(0, len(field_list)):
         if other_field(add_fields, i, field_list):
-            if i != len(field_list)-1:
-                print field_list[i] + '\t',
-            else:
-                print field_list[i]
+            fields.append(field_list[i])
 
-        elif i == len(field_list)-1:
-            print ''
+    print '\t'.join(fields)
 
 def get_field_list():
     first_line = sys.stdin.readline()
     first_line = first_line.rstrip()
-    print first_line + '\t',
+    #print first_line + '\t',
 
     field_list = first_line.split('\t')
     return strip_spaces(field_list)

@@ -39,16 +39,12 @@ def process_file(options):
         print_other_fields(log_data, options.combine, field_list)
 
 def print_other_fields(log_data, combined, field_list):
+    values = []
     for i in range(0, len(field_list)):
-
         if other_field(combined, i, field_list):
-            if i != len(field_list)-1:
-                print log_data[i] + '\t',
-            else:
-                print log_data[i]
+            values.append(log_data[i])
 
-        elif i == len(field_list)-1:
-            print ''
+    print '\t'.join(values)
 
 def other_field(combined, field, field_list):
     for x in combined:
@@ -56,7 +52,6 @@ def other_field(combined, field, field_list):
             return False
 
     return True
-            
     
 def print_combined(log_data, combine_fields, field_list):
     new_string = ''
@@ -69,20 +64,14 @@ def print_combined(log_data, combine_fields, field_list):
 
 def print_field_line(new_field, combine, field_list):
 
-    if len(field_list) > len(combine):
-        print new_field + '\t',
-    else:
-        print new_field
-
+    fields = []
+    fields.append(new_field)
+    
     for i in range(0, len(field_list)):
         if other_field(combine, i, field_list):
-            if i != len(field_list)-1:
-                print field_list[i] + '\t',
-            else:
-                print field_list[i]
+            fields.append(field_list[i])
 
-        elif i == len(field_list)-1:
-            print ''
+    print '\t'.join(fields)
 
 def get_field_list():
     first_line = sys.stdin.readline()

@@ -118,30 +118,15 @@ def print_fields(fields):
     if options.count != '-':
         stats.append(options.count)
 
-    for i in range(0, len(fields)):
-        print fields[i] + '\t',
-
-    for i in range(0, len(stats)):
-        print stats[i],
-        
-        if i != len(stats)-1:
-            print '\t',
-
-    print ''
+    print '\t'.join(fields) + '\t',
+    print '\t'.join(stats)
 
 
 def print_lines(lines, stats):
 
     for log in lines:
         print log.rstrip() + '\t',
-
-        for i in range(0, len(stats)):
-            print stats[i],
-
-            if i != len(stats)-1:
-                print '\t',
-
-        print ''
+        print '\t'.join(stats)
 
 def get_field_list():
     first_line = sys.stdin.readline()
@@ -158,25 +143,20 @@ def calculate_stats(options, values):
     stats = []
     if options.tp99 != '-':
         tp99 = calc_tp99(values, 10)
-        #print tp99
-        stats.append(tp99)
+        stats.append(str(tp99))
 
     if options.ave != '-':
         ave = calc_ave(values)
-        #print ave
-        stats.append(ave)
+        stats.append(str(ave))
     
     if options.standard_dev != '-':
         standard_dev = calc_standard_dev(values)
-        #print standard_dev
-        stats.append(standard_dev)
+        stats.append(str(standard_dev))
 
     if options.count != '-':
-        stats.append(len(values))
+        stats.append(str(len(values)))
 
     return stats
-
-#def calc_tp99(values, field):
 
 def calc_tp99(values, percentile):
     group = []
@@ -192,9 +172,6 @@ def calc_tp99(values, percentile):
     for i in range(0, group_len):
         group.append(values[i])
         
-
-    #print group
-    #print calc_ave(group)
     return calc_ave(group)
     
 def calc_ave(values):
