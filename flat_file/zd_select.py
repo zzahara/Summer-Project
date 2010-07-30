@@ -15,7 +15,7 @@ def process_args():
     global argv
 
     if len(argv) != 2:
-        print 'usage: python zd_select "condition"'
+        print 'usage: ./zd_select "condition"'
         return False
         
     return True
@@ -29,14 +29,15 @@ def process_file():
         log_line = log_line.rstrip()
         log_data = log_line.split('\t')
         line = list_to_dict(log_data, field_list)
-
+    
         if include(line):
             print log_line        
 
 
 def list_to_dict(log_data, field_list):
     return_dict = dict()
-    
+
+    #print log_data
     for i in range(0, len(field_list)):
         return_dict[field_list[i]] = log_data[i]
 
