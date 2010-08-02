@@ -1,7 +1,8 @@
 #!/bin/bash
 echo "top $2 $1s:"
-./zd_select.py "$3" | python zd_cut.py -f $1 | python drop_first.py | sort > tempTopFieldOutput
-cat tempTopFieldOutput | wc -l > totalLogLines
-cat tempTopFieldOutput | uniq -c | sort -nr | head -n $2 > tempTopFieldOutput2
+./zd_cut.py -f $1 > tempTopFieldCutOutput
+cat tempTopFieldCutOutput | ./drop_first.py | wc -l > totalLogLines
+cat tempTopFieldCutOutput | ./zd_select.py "$3" | ./drop_first.py | sort > tempTopFieldSelectOutput
+cat tempTopFieldSelectOutput | uniq -c | sort -nr | head -n $2 > tempTopFieldOutput2
 ./top_field_calc.py totalLogLines tempTopFieldOutput2
 echo ""
