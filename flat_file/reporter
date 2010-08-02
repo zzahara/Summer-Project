@@ -4,4 +4,4 @@ cat $1 | ./top-field page $2
 cat $1 | ./slowest_serverms $2
 cat $1 | ./slowest_server_load $2
 cat $1 | ./top-field referrer $2
-
+cat $1 | ./top-field locale $2
