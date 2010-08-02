@@ -5,3 +5,5 @@ cat $1 | ./slowest_serverms $2
 cat $1 | ./slowest_server_load $2
 cat $1 | ./top-field referrer $2
 cat $1 | ./top-field locale $2
+echo "non archive referrers"
+cat $1 | ./top-field-select referrer $2 "'http://www.archive.org' not in d['referrer']"
