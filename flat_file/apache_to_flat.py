@@ -43,7 +43,7 @@ def process_file(file, img_src, options):
     count_no_match = 0
     regex_no_match = 0
     
-    print_fields(options.fields)
+    print_field_line(options.fields)
     for log_line in file:
         m = c.match(log_line)
         
@@ -85,7 +85,7 @@ def get_bug_values(bug, img_src):
     return bug_values
 
 # prints the first line of the flat file
-def print_fields(fields):
+def print_field_line(fields):
     print '\t'.join(fields)
 
 # prints page values separated by tabs           
