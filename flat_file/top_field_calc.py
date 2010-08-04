@@ -15,6 +15,6 @@ for line in flat_file:
     count = int(array[0])
     percentage = (count/total) * 100
 
-    print '  ' + "%6.3f%%" % (percentage) + '\t' + array[1]
+    print '  ' + "%6.3f%%" % (percentage) + '\t' + str(count)  + '\t' + array[1]
 
 
