@@ -2,4 +2,4 @@
 cd /home/zahara/Summer-Project/flat_file
 input=`ls /var/log/nginx/analytics.access.log*.gz | tail -n 1`
 output=/home/zahara/public_html/reports/`basename $input`.txt
-./reporter $input 10 > $output
+./reporter $input 100 > $output
