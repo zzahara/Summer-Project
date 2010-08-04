@@ -1,9 +1,13 @@
 #!/bin/bash +x
-cat $1 | ./bounce-rate
-cat $1 | ./top-field page $2
-cat $1 | ./slowest_serverms $2
-cat $1 | ./slowest_server_load $2
-cat $1 | ./top-field referrer $2
-cat $1 | ./top-field locale $2
+log_file=$1
+num_results=$2
+main_page='http://www.archive.org'
+cat $log_file | .apache_to_flat.py -f ip -f page -loadtime -f server_ms -f referrer -f useragent -f timestamp -f locale > flat_file
+cat flat_file | ./bounce-rate
+cat flat_file | ./top-field page num_results
+cat flat_file | ./slowest_serverms num_results
+cat flat_file | ./slowest_server_load num_results
+cat flat_file | ./top-field referrer num_results
+cat flat_file | ./top-field locale num_results
 echo "non archive referrers"
-cat $1 | ./top-field-select referrer $2 "'http://www.archive.org' not in d['referrer']"
+cat flat_file | ./top-field-select referrer num_results "$main_page not in d['referrer']"
