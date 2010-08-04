@@ -15,17 +15,14 @@ def process_args():
     global argv, parser
     parser.add_option("-n", action="store", dest="name", help="name of new field")
     parser.add_option("-a", action="append", dest="add_fields", help="fields to add")
-    parser.add_option("-f", action="append", dest="fields", help="fields to be kept in the new flat file")
     
     (options, args) = parser.parse_args(argv)
-    sort_fields = options.fields
-    
     return options
 
 def process_file(options):
     field_list = get_field_list()
 
-    # store the indexes of combining fields
+    # store the indexes of the fields to add
     indexes = []
     for field in options.add_fields:
         indexes.append(field_list.index(field))
@@ -66,7 +63,6 @@ def print_field_line1(new_field, add_fields, field_list):
 def get_field_list():
     first_line = sys.stdin.readline()
     first_line = first_line.rstrip()
-    #print first_line + '\t',
 
     field_list = first_line.split('\t')
     return strip_spaces(field_list)
