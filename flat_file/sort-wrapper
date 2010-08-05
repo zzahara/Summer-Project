@@ -1,2 +1,2 @@
 #!/bin/bash +x
-sort "$@"
+sort "$@" -t$'\t'
