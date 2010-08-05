@@ -17,9 +17,6 @@ for line in flat_file:
         bounces = bounces + 1
     else:
         break
-        
-print 'total lines = ' + str(total)
-print 'total bounces = ' + str(bounces)  
 
 bounce_rate = (bounces/total)*100
 print "bounce rate = " + str(bounce_rate) + '%'
