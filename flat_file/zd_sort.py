@@ -18,9 +18,9 @@ parser = OptionParser()
 def process_args():
     global argv, parser, sort_fields
     parser.add_option("-f", action="append", dest="fields")
-    parser.add_option("-n", action="store", dest="numeric", default=-2)
-    parser.add_option("-r", action="store_true", dest="reverse", default="store_false")
-    parser.add_option("-g", action="store_true", dest="gen_num", default="store_false")
+    parser.add_option("-n", action="store", dest="numeric")
+    parser.add_option("-r", action="store_true", dest="reverse", default=False)
+    parser.add_option("-g", action="store_true", dest="gen_num", default=False)
     
     (options, args) = parser.parse_args(argv)
     sort_fields = options.fields
@@ -35,11 +35,16 @@ def get_field_nums(options):
     script_args.append('')
     length = len(sort_fields)
 
+    numeric = -1
+    if options.numeric:
+        numeric = field_list.index(options.numeric)
+    
     for i in range(0, length):
         index = field_list.index(sort_fields[i])
         
         other_option = ''
-        if int(options.numeric) == i+1:
+        
+        if numeric == field_list[i]:
             other_option = 'n'
 
         if length > 1 and i != length-1:
@@ -56,7 +61,6 @@ def get_field_nums(options):
     if options.gen_num:
         script_args.append('-g')
 
-    print script_args
     return script_args
 
 def get_field_list():
