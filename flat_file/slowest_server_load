@@ -1,4 +1,4 @@
 #!/bin/bash
 echo "slowest $1 pages (server_ms + loadtime):"
-./zd_cut.py -f page -f server_ms -f loadtime | ./zd_select.py "d['server_ms'] != '-' and d['loadtime'] != '-'" | ./zd_add.py -n server_load_sum -a server_ms -a loadtime | ./zd_sort.py -f page -f server_load_sum -n server_load_sum | ./zd_stat.py -a ave -c count -g page -d server_load_sum | ./zd_select.py "int(d['count']) > 3" | ./zd_sort.py -f ave -r -n ave -g | ./zd_cut.py -f page -f ave | ./drop_first.py | uniq | head -n $1
+./zd_cut.py -f page -f server_ms -f loadtime | ./zd_select.py "d['server_ms'] != '-' and d['loadtime'] != '-'" | ./zd_add.py -n server_load_sum -a server_ms -a loadtime | ./zd_sort.py -f page -f server_load_sum -n server_load_sum | ./zd_stat.py -a ave -c count -g page -d server_load_sum | ./zd_select.py "int(d['count']) > 3" | ./zd_sort.py -f ave -r -n ave -g | ./zd_cut.py -f page -f ave | uniq | head -n $1
 echo ""
