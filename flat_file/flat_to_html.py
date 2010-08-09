@@ -14,7 +14,7 @@ parser = OptionParser()
 
 def process_args():
     global argv, parser
-    parser.add_option("-h", action="store_true", dest="header", help="includes a table header based on the first line of the flat file", default=False)
+    parser.add_option("--header", action="store_true", dest="header", help="includes a table header based on the first line of the flat file", default=False)
  
     (options, args) = parser.parse_args(argv)
     return options
