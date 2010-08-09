@@ -1,7 +1,8 @@
 #!/bin/bash
 num_accesses=20
-echo "slowest $1 pages (server_ms):"
-echo "Displays pages with more than $num_accesses access(es)"
+echo "<html><head /><body>"
+echo "<p>slowest $1 pages (server_ms):</p>"
+echo "<p>Displays pages with more than $num_accesses access(es)</p>"
 ./zd_cut.py -f page -f server_ms \
     | ./zd_sort.py -f page -f server_ms -n server_ms \
     | ./zd_select.py "d['server_ms'] != '-'" \
@@ -12,3 +13,4 @@ echo "Displays pages with more than $num_accesses access(es)"
     | uniq | head -n $1 \
     | ./flat_to_html.py --header
 echo ""
+echo "</body> </html>"
