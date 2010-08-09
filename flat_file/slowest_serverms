@@ -1,5 +1,5 @@
 #!/bin/bash
-num_accesses=0
+num_accesses=2
 echo "slowest $1 pages (server_ms):"
 echo "Displays pages with more than $num_accesses access(es)"
 ./zd_cut.py -f page -f server_ms | ./zd_sort.py -f page -f server_ms -n server_ms | ./zd_select.py "d['server_ms'] != '-'" | ./zd_stat.py -a ave_serverms -s standard_dev -g page -d server_ms | ./zd_cut.py -f page -f ave_serverms -f standard_dev | ./zd_sort.py -f ave_serverms -g -r -n ave_serverms | ./zd_reorder.py -f ave_serverms -f standard_dev -f page | uniq | head -n $1
