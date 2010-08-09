@@ -3,5 +3,5 @@ echo "top $2 $1s:"
 ./zd_cut.py -f $1 | ./drop_first.py | sort > /var/tmp/tempTopFieldOutput
 cat /var/tmp/tempTopFieldOutput | wc -l > /var/tmp/totalLogLines
 cat /var/tmp/tempTopFieldOutput | uniq -c | sort -nr | head -n $2 > /var/tmp/tempTopFieldOutput2
-./top_field_calc.py /var/tmp/totalLogLines /var/tmp/tempTopFieldOutput2 | ./flat_to_html.py
+./top_field_calc.py /var/tmp/totalLogLines /var/tmp/tempTopFieldOutput2 | ./flat_to_html.py > /var/tmp/top-field.html
 echo ""
