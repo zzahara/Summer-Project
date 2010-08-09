@@ -51,13 +51,24 @@ def print_table_row(log_data):
     print '<tr>',
 
     for x in log_data:
+        x = x.strip()
         if (x.startswith('http://')):
             print '<td width=\"20%\"><a href=\"' + str(x) + '\">' + str(x) + '</a></td>',
+
+        elif(is_float(x)):
+            print '<td width=\"20%\">' + "%.2f" % (float(x)) + '</td>',
+        
         else:
             print '<td width=\"20%\">' + str(x) + '</td>',
 
     print '</tr>'
 
+def is_float(x):
+    try:
+        float(x)
+        return True
+    except ValueError:
+        return False
 
 # Main
 options = process_args()
