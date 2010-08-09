@@ -25,20 +25,25 @@ def process_file(options):
     prev_line = ''
     
     for log_line in sys.stdin:
-        log_data = log_line.split('\t')
+        try:
+            log_data = log_line.split('\t')
 
-        if len(current) == 0:
-            current = get_current(log_data, indexes)
-            
-        elif equal_values(log_data, indexes, current) == False:
-            equal = False
-            current = get_current(log_data, indexes)
-            print prev_line,
+            if len(current) == 0:
+                current = get_current(log_data, indexes)
+                
+            elif equal_values(log_data, indexes, current) == False:
+                equal = False
+                current = get_current(log_data, indexes)
+                print prev_line,
 
-        else:
-            equal = True
-            
-        prev_line = log_line
+            else:
+                equal = True
+                
+            prev_line = log_line
+
+        except IOError, e:
+            if e.errno == errno.EPIPE:
+                exit(0)      
 
     # last line
     if equal == False:

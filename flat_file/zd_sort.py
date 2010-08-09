@@ -40,20 +40,25 @@ def get_field_nums(options):
         numeric = field_list.index(options.numeric)
     
     for i in range(0, length):
-        index = field_list.index(sort_fields[i])
-        
-        other_option = ''
-        
-        if numeric == field_list[i]:
-            other_option = 'n'
+        try:
+            index = field_list.index(sort_fields[i])
+            
+            other_option = ''
+            
+            if numeric == field_list[i]:
+                other_option = 'n'
 
-        if length > 1 and i != length-1:
-            script_args.append('-k')
-            script_args.append(str(index+1) + ',' + str(index+1) + other_option)
+            if length > 1 and i != length-1:
+                script_args.append('-k')
+                script_args.append(str(index+1) + ',' + str(index+1) + other_option)
 
-        else:
-            script_args.append('-k')
-            script_args.append(str(index+1) + other_option)
+            else:
+                script_args.append('-k')
+                script_args.append(str(index+1) + other_option)
+
+        except IOError, e:
+            if e.errno == errno.EPIPE:
+                exit(0)
 
     if options.reverse:
         script_args.append('-r')

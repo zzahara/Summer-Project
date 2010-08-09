@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # Written by Zahara Docena
 # usage: zd_stat 
-# http://www01.us.archive.org/~samuel/access-data.php?datecode=20100621
 
 import re
 import os
@@ -25,8 +24,6 @@ def process_args():
     parser.add_option("-d", action="store", dest="data", help="calculates the statistics of these values", default="loadtime")
  
     (options, args) = parser.parse_args(argv)
-    #parserOptions = options
-
     return options
 
 
@@ -46,33 +43,41 @@ def process_file(options):
     saved_lines = [] # log lines in the current group
 
     for log_line in sys.stdin:
-        log_line = log_line.rstrip()
-        log_data = log_line.split('\t')
+        try:
+            log_line = log_line.rstrip()
+            log_data = log_line.split('\t')
 
-        # first group
-        if len(current) == 0:
-            current = get_current(log_data, grouped_by)
+            # first group
+            if len(current) == 0:
+                current = get_current(log_data, grouped_by)
 
-        if in_group(log_data, grouped_by, current):
-            data.append(log_data[data_field])
-            saved_lines.append(log_line)           
-        else:
-            # end of group so calculate stats
-            stats = calculate_stats(options, data)
-            print_lines(saved_lines, stats)
+            if in_group(log_data, grouped_by, current):
+                data.append(log_data[data_field])
+                saved_lines.append(log_line)           
+            else:
+                # end of group so calculate stats
+                stats = calculate_stats(options, data)
+                print_lines(saved_lines, stats)
 
-            # store new group's values
-            current = get_current(log_data, grouped_by)
-            data = []
-            saved_lines = []
+                # store new group's values
+                current = get_current(log_data, grouped_by)
+                data = []
+                saved_lines = []
 
-            data.append(log_data[data_field])
-            saved_lines.append(log_line)  
+                data.append(log_data[data_field])
+                saved_lines.append(log_line)  
+
+        except IOError, e:
+            if e.errno == errno.EPIPE:
+                exit(0)
 
     # last group
-    stats = calculate_stats(options, data)
-    print_lines(saved_lines, stats)
-
+    try:
+        stats = calculate_stats(options, data)
+        print_lines(saved_lines, stats)
+    except IOError, e:
+            if e.errno == errno.EPIPE:
+                exit(0)
 
 # gets the field values of the current group
 def get_current(log_data, grouped_by):
@@ -82,14 +87,12 @@ def get_current(log_data, grouped_by):
         value = log_data[field_index]
         current.append(value)
 
-    #print current
     return current
 
 # verifies if a log line belongs in the current group
 def in_group(log_data, grouped_by, current):
     i = 0
     for field_num in grouped_by:
-
         if log_data[field_num] != current[i]:
             return False
             
@@ -123,7 +126,6 @@ def print_fields(fields):
 
 
 def print_lines(lines, stats):
-
     for log in lines:
         print log.rstrip() + '\t',
         print '\t'.join(stats)
@@ -131,9 +133,9 @@ def print_lines(lines, stats):
 def get_field_list():
     first_line = sys.stdin.readline()
     first_line = first_line.rstrip()
-    field_names = first_line.split('\t')
+    field_list = first_line.split('\t')
     
-    return field_names
+    return field_list
 
 # ------------------------------------------------------------
 #                Calculating Statistics Functions

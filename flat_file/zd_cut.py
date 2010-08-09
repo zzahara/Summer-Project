@@ -30,12 +30,19 @@ def get_script_args():
     field_nums = []
     
     for i in range(0, len(cut_fields_str)):
-        index = field_list.index(cut_fields_str[i])
-        indexes.append(index)
-        field_nums.append(str(index+1))
-
-    write_first_line(indexes, field_list)
-    script_args.append(','.join(field_nums))
+        try:
+            index = field_list.index(cut_fields_str[i])
+            indexes.append(index)
+            field_nums.append(str(index+1))
+        except IOError, e:
+            if e.errno == errno.EPIPE:
+                exit(0)
+    try:
+        write_first_line(indexes, field_list)
+        script_args.append(','.join(field_nums))
+    except IOError, e:
+        if e.errno == errno.EPIPE:
+            exit(0)      
     return script_args
 
 def write_first_line(indexes, field_list):

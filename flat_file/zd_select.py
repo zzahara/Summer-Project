@@ -26,12 +26,17 @@ def process_file():
     exec("include = lambda d: " + argv[1])
 
     for log_line in sys.stdin:
-        log_line = log_line.rstrip()
-        log_data = log_line.split('\t')
-        line = list_to_dict(log_data, field_list)
-    
-        if include(line):
-            print log_line        
+        try:
+            log_line = log_line.rstrip()
+            log_data = log_line.split('\t')
+            line = list_to_dict(log_data, field_list)
+        
+            if include(line):
+                print log_line
+
+        except IOError, e:
+            if e.errno == errno.EPIPE:
+                exit(0)       
 
 
 def list_to_dict(log_data, field_list):

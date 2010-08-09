@@ -1,7 +1,28 @@
 #!/usr/bin/env python
 # Written by Zahara Docena
 
-# combines fields into a new field, useful for computing bounce rate
+# Input: flat file (must include the selected fields to combine)
+# Output: flat file 
+#   - deletes the combined fields' columns
+#   - concatenates the selected fields and adds a new column with the combined value
+
+# Example: ./zd_combine.py -n combined_field -c ip -c locale
+
+# Input:
+# ip    page    referrer    locale
+# 0.29.113.149  -   -   en-US
+# 0.17.457.261  -   -   en-US
+# (log line values)
+# (log line values)
+# ...
+
+# Output:
+# combined_field     page    referrer
+# 0.29.113.149en-US  -   -
+# 0.17.457.261en-US  -   -
+# (log line values)
+# (log line values)
+# ...
 
 import os
 import sys
@@ -15,11 +36,8 @@ def process_args():
     global argv, parser
     parser.add_option("-n", action="store", dest="name", help="name of new field")
     parser.add_option("-c", action="append", dest="combine", help="fields to combine in the order entered")
-    parser.add_option("-f", action="append", dest="fields", help="fields to be kept in the new flat file")
     
     (options, args) = parser.parse_args(argv)
-    sort_fields = options.fields
-    
     return options
 
 def process_file(options):
@@ -32,11 +50,16 @@ def process_file(options):
 
     print_field_line(options.name, options.combine, field_list)
     for log_line in sys.stdin:
-        log_line = log_line.rstrip()
-        log_data = log_line.split('\t')
+        try:
+            log_line = log_line.rstrip()
+            log_data = log_line.split('\t')
 
-        print_combined(log_data, options.combine, field_list)
-        print_other_fields(log_data, options.combine, field_list)
+            print_combined(log_data, options.combine, field_list)
+            print_other_fields(log_data, options.combine, field_list)
+
+        except IOError, e:
+            if e.errno == errno.EPIPE:
+                exit(0)
 
 def print_other_fields(log_data, combined, field_list):
     values = []
@@ -58,8 +81,8 @@ def print_combined(log_data, combine_fields, field_list):
 
     for field in combine_fields:
         index = field_list.index(field)
-
         new_string = new_string + log_data[index]
+
     print new_string + '\t',
 
 def print_field_line(new_field, combine, field_list):
@@ -79,13 +102,7 @@ def get_field_list():
 
     field_list = first_line.split('\t')
     return field_list
-    #return strip_spaces(field_list)
-
-def strip_spaces(list):
-    for i in range(0, len(list)):
-        list[i] = list[i].rstrip()
-    return list
-
+    
 # Main
 options = process_args()
 process_file(options)
