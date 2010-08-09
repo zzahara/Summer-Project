@@ -18,6 +18,7 @@
 
 import os
 import sys
+import errno
 from sys import argv
 from optparse import OptionParser
 
@@ -40,10 +41,13 @@ def process_file(options):
 
     print_field_line(options.fields)
     for log_line in sys.stdin:
-        log_line = log_line.rstrip()
-        log_data = log_line.split('\t') 
-
-        print_line(log_data, indexes)
+        try:
+            log_line = log_line.rstrip()
+            log_data = log_line.split('\t') 
+            print_line(log_data, indexes)
+        except IOError, e:
+            if e.errno == errno.EPIPE:
+                exit(0)
 
 def print_line(log_data, indexes):
     values = []
