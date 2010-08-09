@@ -6,10 +6,23 @@
 
 import os
 import sys
+from sys import argv
+from optparse import OptionParser
 
-def process_file():
+argv
+parser = OptionParser()
+
+def process_args():
+    global argv, parser
+    parser.add_option("-h", action="store_true", dest="header", help="includes a table header based on the first line of the flat file", default=False)
+ 
+    (options, args) = parser.parse_args(argv)
+    return options
+
+def process_file(options):
     field_list = get_field_list()
-    print_table_header(field_list)
+    if options.header:
+        print_table_header(field_list)
 
     for log_line in sys.stdin:
         log_line = log_line.rstrip()
@@ -44,7 +57,8 @@ def print_table_row(log_data):
 
 
 # Main
-process_file()
+options = process_args()
+process_file(options)
 
 
 
