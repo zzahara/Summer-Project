@@ -21,7 +21,7 @@ def process_args():
 
 def process_file(options):
     field_list = get_field_list()
-    print '<table border=\"1\" cellpadding=\"5\" cellspacing=\"1\" width=\"75%\">',
+    print '<table border=\"1\" cellpadding=\"5\" cellspacing=\"1\" width=\"75%\">'
     if options.header:
         print_table_header(field_list)
 
@@ -45,7 +45,7 @@ def print_table_header(fields):
     for x in fields:
         print '<th>' + str(x) + '</th>',
 
-    print '</tr>',
+    print '</tr>'
 
 def print_table_row(log_data):
     print '<tr>',
@@ -53,7 +53,7 @@ def print_table_row(log_data):
     for x in log_data:
         print '<td width=\"20%\">' + str(x) + '</td>',
 
-    print '</tr>',
+    print '</tr>'
 
 
 # Main
