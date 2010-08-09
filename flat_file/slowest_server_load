@@ -1,4 +1,6 @@
 #!/bin/bash
+num_accesses=0
 echo "slowest $1 pages (server_ms + loadtime):"
-./zd_cut.py -f page -f server_ms -f loadtime | ./zd_select.py "d['server_ms'] != '-' and d['loadtime'] != '-'" | ./zd_add.py -n server_load_sum -a server_ms -a loadtime | ./zd_sort.py -f page -f server_load_sum -n server_load_sum | ./zd_stat.py -a ave -c count -g page -d server_load_sum | ./zd_select.py "int(d['count']) > 0" | ./zd_sort.py -f ave -r -n ave -g | ./zd_cut.py -f page -f ave | ./zd_reorder.py -f ave -f page | ./drop_first.py | uniq | head -n $1
+echo "displays pages with at least $num_accesses access(es)"
+./zd_cut.py -f page -f server_ms -f loadtime | ./zd_select.py "d['server_ms'] != '-' and d['loadtime'] != '-'" | ./zd_add.py -n server_load_sum -a server_ms -a loadtime | ./zd_sort.py -f page -f server_load_sum -n server_load_sum | ./zd_stat.py -a ave -c count -s standard_dev -g page -d server_load_sum | ./zd_select.py "int(d['count']) > $num_accesses" | ./zd_sort.py -f ave -r -n ave -g | ./zd_cut.py -f page -f ave -f standard_dev | ./zd_reorder.py -f ave -f standard_dev -f page | ./drop_first.py | uniq | head -n $1
 echo ""
