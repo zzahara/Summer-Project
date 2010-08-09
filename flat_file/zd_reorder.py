@@ -46,8 +46,8 @@ def process_file(options):
             log_data = log_line.split('\t') 
             print_line(log_data, indexes)
         except IOError, e:
-            if e.errno == errno.EPIPE:
-                exit(0)
+        if e.errno == errno.EPIPE:
+            exit(0)
 
 def print_line(log_data, indexes):
     values = []

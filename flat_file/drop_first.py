@@ -10,7 +10,6 @@ for line in sys.stdin:
     try:
         print line,
     except IOError, e:
-        if e.errno == errno.EPIPE:
-            exit(0)
-
+        if e.errno == errno.EPIPE:
+            exit(0)
 
