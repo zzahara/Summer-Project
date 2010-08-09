@@ -4,7 +4,7 @@
 # Input: flat file
 # Output: flat file (with the columns reordered)
 
-# Example: ./zd_reorder.py -f count -f page -f locale
+# Example: ./zd_reorder.py -f count -f page
 
 # Input:
 # page          count     locale
@@ -12,8 +12,8 @@
 # ...
 
 # Output:
-# count     page            locale
-# 6791      website.com     en-us
+# count     page
+# 6791      website.com
 # ...
 
 import os
