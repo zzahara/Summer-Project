@@ -26,7 +26,7 @@ def get_field_list():
     return field_list
 
 def print_table_header(fields):
-    print '<table border="1" cellpadding="5" cellspacing="5" width="100%">'
+    print '<table border="1" cellpadding="5" cellspacing="1" width="75%">'
     print '<tr>'
     
     for x in fields:
