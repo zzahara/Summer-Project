@@ -21,7 +21,7 @@ def process_args():
 
 def process_file(options):
     field_list = get_field_list()
-    print '<table border=\"1\" cellpadding=\"5\" cellspacing=\"1\">'
+    print '<table border=\"1\" cellpadding=\"5\" cellspacing=\"1\" width=\"50%\">'
     if options.header:
         print_table_header(field_list)
 
