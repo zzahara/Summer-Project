@@ -11,5 +11,6 @@ echo "Displays pages with more than $num_accesses access(es)"
     | ./zd_sort.py -f ave -r -n ave -g \
     | ./zd_cut.py -f page -f ave -f standard_dev \
     | ./zd_reorder.py -f ave -f standard_dev -f page \
-    | uniq | head -n $1
+    | uniq | head -n $1 \
+    | ./flat_to_html.py --header
 echo ""
