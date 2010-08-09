@@ -45,7 +45,7 @@ def print_table_header(fields):
     for x in fields:
         print '<th>' + str(x) + '</th>',
 
-    print '</tr>',
+    print '</tr>'
 
 def print_table_row(log_data):
     print '<tr>',
