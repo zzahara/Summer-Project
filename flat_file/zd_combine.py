@@ -9,23 +9,18 @@
 # Example: ./zd_combine.py -n combined_field -c ip -c locale
 
 # Input:
-# ip    page    referrer    locale
-# 0.29.113.149  -   -   en-US
-# 0.17.457.261  -   -   en-US
-# (log line values)
-# (log line values)
+# ip                         page               locale
+# 0.29.113.149          www.yoursite.com        en-US
 # ...
 
 # Output:
-# combined_field     page    referrer
-# 0.29.113.149en-US  -   -
-# 0.17.457.261en-US  -   -
-# (log line values)
-# (log line values)
+# combined_field             page     
+# 0.29.113.149en-US     www.yoursite.com
 # ...
 
 import os
 import sys
+import errno
 from sys import argv
 from optparse import OptionParser
 

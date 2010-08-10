@@ -7,6 +7,7 @@
 
 import os
 import sys
+import errno
 from sys import argv
 from optparse import OptionParser
 

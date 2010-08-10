@@ -5,6 +5,7 @@
 
 import os
 import sys
+import errno
 import optparse
 from sys import argv
 from optparse import OptionParser

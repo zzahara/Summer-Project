@@ -4,6 +4,7 @@
 import re
 import os
 import sys
+import errno
 import math
 from sys import argv
 from optparse import OptionParser
