@@ -19,4 +19,4 @@ for line in flat_file:
         break
 
 bounce_rate = (bounces/total)*100
-print "bounce rate = %.2f%%" % (bounce_rate) + '%<br><br>'
+print "bounce rate = %.2f%%" % (bounce_rate) + '<br><br>'
