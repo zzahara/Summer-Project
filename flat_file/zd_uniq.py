@@ -5,6 +5,13 @@
 # This program is distributed under the terms of the GNU General Public License v3
 # see: http://www.gnu.org/licenses/gpl.txt 
 
+# Input: flat file (must include the selected fields)
+# Output: flat file 
+#   - detects the way the input file is grouped
+#   - and removes all lines within a group that share the field values specified
+
+# usage: ./zd_uniq.py -f field1 -f field2
+
 import re
 import os
 import sys
@@ -12,7 +19,6 @@ import math
 import errno
 from sys import argv
 from optparse import OptionParser
-
 
 argv
 parser = OptionParser()
