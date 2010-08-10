@@ -9,8 +9,8 @@ echo "Displays pages with more than $num_accesses access(es)<br>"
     | ./zd_stat.py -a ave -c count -s standard_dev -g page -d server_load_sum \
     | ./zd_select.py "int(d['count']) > $num_accesses" \
     | ./zd_sort.py -f ave -r -n ave -g \
-    | ./zd_cut.py -f page -f ave -f standard_dev \
-    | ./zd_reorder.py -f ave -f standard_dev -f page \
+    | ./zd_cut.py -f page -f ave -f count -f standard_dev \
+    | ./zd_reorder.py -f ave -f count -f standard_dev -f page \
     | uniq | head -n $1 \
     | ./flat_to_html.py --header
 echo "<br><br>"
