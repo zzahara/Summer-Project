@@ -1,9 +1,13 @@
 #!/usr/bin/env python
-# Written by Zahara Docena
 
-# usage: python zd_sort.py -f field 
-# usage: python zd_sort.py -f field1 -f field2 ... [-n] [field#] [-r]
-# e.g. python zd_sort.py -f page -f loadtime -n 2 ... (will 1st sort by page, 2nd sort by loadtime numerically for same pages)
+# Copyright 2010 Inyternet Archive
+# Written by Zahara Docena
+# This program is distributed under the terms of the GNU General Public License v3
+# see: http://www.gnu.org/licenses/gpl.txt 
+
+# usage: ./zd_sort.py -f field 
+# usage: ./zd_sort.py -f field1 -f field2 ... [-n] [field] [-r]
+# e.g. ./zd_sort.py -f page -f loadtime -n loadtime ... (will 1st sort by page, 2nd sort by loadtime numerically for same pages)
 
 import os
 import sys
@@ -18,17 +22,17 @@ parser = OptionParser()
 
 def process_args():
     global argv, parser, sort_fields
-    parser.add_option("-f", action="append", dest="fields")
-    parser.add_option("-n", action="store", dest="numeric")
-    parser.add_option("-r", action="store_true", dest="reverse", default=False)
-    parser.add_option("-g", action="store_true", dest="gen_num", default=False)
+    parser.add_option("-f", action="append", help="fields to sort by", dest="fields")
+    parser.add_option("-n", action="store", help="the field to sort numerically", dest="numeric")
+    parser.add_option("-r", action="store_true", help="reverse sort", dest="reverse", default=False)
+    parser.add_option("-g", action="store_true", help="general numeric sort (sorts numbers with + correctly)", dest="gen_num", default=False)
     
     (options, args) = parser.parse_args(argv)
     sort_fields = options.fields
 
     return options
 
-def get_field_nums(options):
+def get_script_args(options):
     global sort_fields
     field_list = get_field_list()
 
@@ -92,5 +96,5 @@ def sort(script_args):
 
 # Main
 options = process_args()
-script_args = get_field_nums(options)
+script_args = get_script_args(options)
 sort(script_args)

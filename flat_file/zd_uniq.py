@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+
+# Copyright 2010 Inyternet Archive
 # Written by Zahara Docena
+# This program is distributed under the terms of the GNU General Public License v3
+# see: http://www.gnu.org/licenses/gpl.txt 
 
 import re
 import os
@@ -78,7 +82,6 @@ def get_current(log_data, grouped_by):
         value = log_data[field_index]
         current.append(value)
 
-    #print current
     return current
 
 

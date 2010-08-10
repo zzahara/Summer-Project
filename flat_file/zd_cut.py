@@ -12,7 +12,7 @@
 
 # Input:
 # ip                         page               loadtime
-# 0.29.113.149          www.yoursite.com         6789.46
+# 0.29.113.149          www.yoursite.com         678
 # ...
 
 # Output:

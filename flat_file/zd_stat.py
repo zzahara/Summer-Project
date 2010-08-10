@@ -1,6 +1,42 @@
 #!/usr/bin/env python
+
+# Copyright 2010 Inyternet Archive
 # Written by Zahara Docena
-# usage: zd_stat 
+# This program is distributed under the terms of the GNU General Public License v3
+# see: http://www.gnu.org/licenses/gpl.txt 
+
+# Input: flat file (must be sorted by the grouping specified in the options)
+# Output: flat file (with new field columns of the desired statistics)
+
+# usage: ./zd_stat.py ...desired options... -g field1 -f field2 -d values
+# Example: ./zd_stat.py -a ave_loadtime -c num_vals -g ip -g page -d loadtime
+
+#   -g ip -g page: 
+#       - the input flat file is sorted by 1. ip 2. page
+#       - the program will compute the statistics of this grouping
+
+#   -d loadtime:
+#       - the program will compute the statistics of these values
+
+# Input:
+# ip                         page           loadtime
+# 0.29.113.149          www.abc.com            56 
+# 0.29.113.149          www.boy.com            32
+# 0.29.113.149          www.cat.com            32
+# 0.14.789.1            www.abc.com            14
+# 0.78.234.654          www.fun.com            78
+# ...
+
+
+# Output:
+# ip                         page           loadtime      ave_loadtime      num_values
+# 0.29.113.149          www.abc.com            56           40                  3
+# 0.29.113.149          www.boy.com            32           40                  3
+# 0.29.113.149          www.cat.com            32           40                  3
+# 0.14.789.1            www.abc.com            14           14                  1
+# 0.78.234.654          www.fun.com            78           78                  1
+# ...
+
 
 import re
 import os
