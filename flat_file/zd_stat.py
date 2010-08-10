@@ -117,7 +117,6 @@ def print_fields(fields):
     
     if options.standard_dev != '-':
         stats.append(options.standard_dev)
-        stats.append('n')
 
     if options.count != '-':
         stats.append(options.count)
@@ -155,7 +154,6 @@ def calculate_stats(options, values):
     if options.standard_dev != '-':
         standard_dev = calc_standard_dev(values)
         stats.append(str(standard_dev))
-        stats.append(str(len(values)))
 
     if options.count != '-':
         stats.append(str(len(values)))
