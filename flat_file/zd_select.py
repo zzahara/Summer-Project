@@ -1,5 +1,24 @@
 #!/usr/bin/env python
+
+# Copyright 2010 Inyternet Archive
 # Written by Zahara Docena
+# This program is distributed under the terms of the GNU General Public License v3
+# see: http://www.gnu.org/licenses/gpl.txt 
+
+# Input: flat file (must include the selected fields in the condition)
+# Output: flat file (with lines that satisfy the given condition)
+
+# Example: ./zd_select.py "d['loadtime'] > 100"
+
+# Input:
+# ip                         page               loadtime
+# 0.29.113.149          www.yoursite.com         6789
+# 0.29.113.149          www.yoursite.com         56
+# ...
+
+# Output:
+# ip                         page               loadtime
+# 0.29.113.149          www.yoursite.com         6789
 
 import re
 import os
@@ -8,7 +27,6 @@ import errno
 import math
 from sys import argv
 from optparse import OptionParser
-
 
 argv
 
@@ -43,7 +61,6 @@ def process_file():
 def list_to_dict(log_data, field_list):
     return_dict = dict()
 
-    #print log_data
     for i in range(0, len(field_list)):
         return_dict[field_list[i]] = log_data[i]
 

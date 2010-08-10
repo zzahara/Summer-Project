@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+
+# Copyright 2010 Inyternet Archive
 # Written by Zahara Docena
+# This program is distributed under the terms of the GNU General Public License v3
+# see: http://www.gnu.org/licenses/gpl.txt 
 
 # Input: flat file (must include the selected fields to combine)
 # Output: flat file 
@@ -56,6 +60,7 @@ def process_file(options):
             if e.errno == errno.EPIPE:
                 exit(0)
 
+# print the fields that aren't being combined
 def print_other_fields(log_data, combined, field_list):
     values = []
     for i in range(0, len(field_list)):
@@ -64,13 +69,14 @@ def print_other_fields(log_data, combined, field_list):
 
     print '\t'.join(values)
 
+# check if the field is not one of the combined fields
 def other_field(combined, field, field_list):
     for x in combined:
         if field == field_list.index(x):
             return False
 
     return True
-    
+   
 def print_combined(log_data, combine_fields, field_list):
     new_string = ''
 
@@ -81,7 +87,6 @@ def print_combined(log_data, combine_fields, field_list):
     print new_string + '\t',
 
 def print_field_line(new_field, combine, field_list):
-
     fields = []
     fields.append(new_field)
     

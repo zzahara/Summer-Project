@@ -1,8 +1,14 @@
 #!/usr/bin/env python
-# Written by Zahara Docena
 
-# Input: flat file
-# Output: flat file (with the columns reordered)
+# Copyright 2010 Inyternet Archive
+# Written by Zahara Docena
+# This program is distributed under the terms of the GNU General Public License v3
+# see: http://www.gnu.org/licenses/gpl.txt 
+
+# Input: flat file (must have the selected fields to reorder)
+# Output: flat file 
+#   - with the columns reordered
+#   - will only output the specified fields
 
 # Example: ./zd_reorder.py -f count -f page
 

@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+
+# Copyright 2010 Inyternet Archive
 # Written by Zahara Docena
+# This program is distributed under the terms of the GNU General Public License v3
+# see: http://www.gnu.org/licenses/gpl.txt 
 
 # Input: flat file (must include the selected fields to add)
 # Output: flat file (same as input with a new sum field)

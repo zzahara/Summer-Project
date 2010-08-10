@@ -10,6 +10,7 @@ flat_file = open(argv[2])
 total = float(total_file.readline())
 bounces = 0
 
+# count the number of users who only visited one page
 for line in flat_file:
     line = line.strip()
     

@@ -1,7 +1,23 @@
 #!/usr/bin/env python
-# Written by Zahara Docena
 
-# usage: python zd_cut.py -f field [--file] [filename]
+# Copyright 2010 Inyternet Archive
+# Written by Zahara Docena
+# This program is distributed under the terms of the GNU General Public License v3
+# see: http://www.gnu.org/licenses/gpl.txt 
+
+# Input: flat file (must include the selected fields to cut)
+# Output: flat file (with only the cut fields)
+
+# Example: ./zd_cut.py -f ip -f page
+
+# Input:
+# ip                         page               loadtime
+# 0.29.113.149          www.yoursite.com         6789.46
+# ...
+
+# Output:
+# ip                         page     
+# 0.29.113.149          www.yoursite.com
 
 import os
 import sys
@@ -12,17 +28,16 @@ from optparse import OptionParser
 
 argv
 parser = OptionParser()
-cut_fields_str = []
+cut_fields = []
 
 def process_args():
-    global argv, cut_fields_str, filename
+    global argv, cut_fields, filename
     parser.add_option("-f", action="append", dest="fields") # fields to cut
 
     (options, args) = parser.parse_args(argv)
-    cut_fields_str = options.fields
+    cut_fields = options.fields
 
 def get_script_args():
-    global first_line
     field_list = get_field_list()
     field_nums = ''
 
@@ -30,9 +45,9 @@ def get_script_args():
     indexes = []
     field_nums = []
     
-    for i in range(0, len(cut_fields_str)):
+    for i in range(0, len(cut_fields)):
         try:
-            index = field_list.index(cut_fields_str[i])
+            index = field_list.index(cut_fields[i])
             indexes.append(index)
             field_nums.append(str(index+1))
         except IOError, e:
