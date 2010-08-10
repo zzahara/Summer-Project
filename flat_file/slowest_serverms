@@ -5,7 +5,6 @@ echo "Displays pages with more than $num_accesses access(es)<br>"
 ./zd_cut.py -f page -f server_ms \
     | ./zd_select.py "d['server_ms'] != '-'" \
     | ./zd_sort.py -f page -f server_ms -n server_ms \
-    | ./zd_stat.py -a ave_serverms -c count -s standard_dev -g page -d server_ms
+    | ./zd_stat.py -a ave_serverms -c count -s standard_dev -g page -d server_ms \
     | uniq | head -n $1 \
-    | ./flat_to_html.py --header
 echo "<br><br>"
