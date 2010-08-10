@@ -4,7 +4,7 @@ echo "slowest $1 pages (server_ms):<br>"
 echo "Displays pages with more than $num_accesses access(es)<br>"
 ./zd_cut.py -f page -f server_ms \
     | ./zd_select.py "d['server_ms'] != '-'" \
-    | ./zd_sort.py -f page -f server_ms -n server_ms -g \
+    | ./zd_sort.py -f page -f server_ms -n server_ms \
     | ./zd_stat.py -a ave_serverms -c count -s standard_dev -g page -d server_ms \
     | ./zd_cut.py -f page -f ave_serverms -f count -f standard_dev -f n\
     | ./zd_sort.py -f ave_serverms -g -r -n ave_serverms \
