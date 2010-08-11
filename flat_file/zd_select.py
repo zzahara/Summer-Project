@@ -21,10 +21,10 @@
 # 0.29.113.149          www.yoursite.com         6789
 
 import re
-import os
 import sys
-import errno
 import math
+import errno
+import zd_lib
 from sys import argv
 from optparse import OptionParser
 
@@ -41,7 +41,7 @@ def process_args():
 
 def process_file():
     global argv
-    field_list = get_field_list()
+    field_list = zd_lib.get_field_list()
     exec("include = lambda d: " + argv[1])
 
     print '\t'.join(field_list)
@@ -66,19 +66,6 @@ def list_to_dict(log_data, field_list):
         return_dict[field_list[i]] = log_data[i]
 
     return return_dict
-
-def get_field_list():
-    first_line = sys.stdin.readline()
-    first_line = first_line.rstrip('\n')
-    
-    field_list = first_line.split('\t')
-    return field_list
-
-def strip_spaces(list):
-    for i in range(0, len(list)):
-        list[i] = list[i].rstrip()
-    return list
-
 
 # Main
 if process_args():

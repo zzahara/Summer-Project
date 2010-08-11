@@ -9,6 +9,7 @@
 import os
 import sys
 import errno
+import zd_lib
 from sys import argv
 from optparse import OptionParser
 
@@ -23,7 +24,7 @@ def process_args():
     return options
 
 def process_file(options):
-    field_list = get_field_list()
+    field_list = zd_lib.get_field_list()
     indexes = get_indexes(field_list, options.fields)
     
     current = []
@@ -86,12 +87,6 @@ def get_current(log_data, grouped_by):
     #print current
     return current
 
-def get_field_list():
-    first_line = sys.stdin.readline()
-    first_line = first_line.rstrip('\n')
-
-    field_list = first_line.split('\t')
-    return strip_spaces(field_list)
 
 options = process_args()
 process_file(options)

@@ -12,6 +12,7 @@
 import os
 import sys
 import errno
+import zd_lib
 from sys import argv
 from optparse import OptionParser
 
@@ -34,7 +35,7 @@ def process_args():
 
 def get_script_args(options):
     global sort_fields, field_list
-    field_list = get_field_list()
+    field_list = zd_lib.get_field_list_wrapper()
 
     script_args = []
     script_args.append('')
@@ -72,19 +73,6 @@ def get_script_args(options):
         script_args.append('-g')
 
     return script_args
-
-def get_field_list():
-    first_line = ''
-    char = os.read(0,1)
-    
-    while char != '\n':
-        first_line = first_line + char
-        char = os.read(0,1)
-
-    first_line = first_line.rstrip()
-    field_names = first_line.split('\t')
-
-    return field_names
 
 def sort(script_args):
     global field_list

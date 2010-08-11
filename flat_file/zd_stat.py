@@ -39,10 +39,10 @@
 
 
 import re
-import os
 import sys
 import math
 import errno
+import zd_lib
 from sys import argv
 from optparse import OptionParser
 
@@ -65,7 +65,7 @@ def process_args():
 
 
 def process_file(options):
-    field_list = get_field_list()
+    field_list = zd_lib.get_field_list()
     print_fields(field_list)
 
     # store the indexes of grouping fields
@@ -166,13 +166,6 @@ def print_lines(lines, stats):
     for log in lines:
         print log.rstrip() + '\t',
         print '\t'.join(stats)
-
-def get_field_list():
-    first_line = sys.stdin.readline()
-    first_line = first_line.rstrip('\n')
-    field_list = first_line.split('\t')
-    
-    return field_list
 
 # ------------------------------------------------------------
 #                Calculating Statistics Functions

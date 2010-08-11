@@ -22,9 +22,9 @@
 # 0.29.113.149en-US     www.yoursite.com
 # ...
 
-import os
 import sys
 import errno
+import zd_lib
 from sys import argv
 from optparse import OptionParser
 
@@ -40,7 +40,7 @@ def process_args():
     return options
 
 def process_file(options):
-    field_list = get_field_list()
+    field_list = zd_lib.get_field_list()
 
     # store the indexes of combining fields
     indexes = []
@@ -95,13 +95,6 @@ def print_field_line(new_field, combine, field_list):
             fields.append(field_list[i])
 
     print '\t'.join(fields)
-
-def get_field_list():
-    first_line = sys.stdin.readline()
-    first_line = first_line.rstrip()
-
-    field_list = first_line.split('\t')
-    return field_list
     
 # Main
 options = process_args()

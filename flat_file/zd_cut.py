@@ -22,6 +22,7 @@
 import os
 import sys
 import errno
+import zd_lib
 import optparse
 from sys import argv
 from optparse import OptionParser
@@ -38,7 +39,7 @@ def process_args():
     cut_fields = options.fields
 
 def get_script_args():
-    field_list = get_field_list()
+    field_list = zd_lib.get_field_list_wrapper()
     field_nums = ''
 
     script_args = ['']
@@ -72,19 +73,6 @@ def write_first_line(indexes, field_list):
     first_line = '\t'.join(fields)
     os.write(1, first_line)
     os.write(1,'\n')
-
-def get_field_list():
-    first_line = ''
-    char = os.read(0,1)
-    
-    while char != '\n':
-        first_line = first_line + char
-        char = os.read(0,1)
-
-    first_line = first_line.rstrip()
-    field_list = first_line.split('\t')
-
-    return field_list
 
 def cut(script_args):
     os.execv("cut-wrapper", script_args)

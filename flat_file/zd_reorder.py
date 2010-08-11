@@ -22,9 +22,9 @@
 # 6791      website.com
 # ...
 
-import os
 import sys
 import errno
+import zd_lib
 from sys import argv
 from optparse import OptionParser
 
@@ -39,7 +39,7 @@ def process_args():
     return options
 
 def process_file(options):
-    field_list = get_field_list()
+    field_list = zd_lib.get_field_list()
 
     indexes = []
     for field in options.fields:
@@ -65,12 +65,6 @@ def print_line(log_data, indexes):
 def print_field_line(fields):
     print '\t'.join(fields)
 
-def get_field_list():
-    first_line = sys.stdin.readline()
-    first_line = first_line.rstrip()
-
-    field_list = first_line.split('\t')
-    return field_list
 
 # Main
 options = process_args()

@@ -20,7 +20,6 @@
 # 500         200        700
 # ...
 
-import os
 import sys
 import errno
 import zd_lib
@@ -72,13 +71,6 @@ def print_sum(log_data, sum_fields, field_list):
 def print_field_line(new_field, field_list):
     field_list.append(new_field)
     print '\t'.join(field_list)
-
-def get_field_list():
-    first_line = sys.stdin.readline()
-    first_line = first_line.rstrip()
-
-    field_list = first_line.split('\t')
-    return field_list
 
 # Main
 options = process_args()
