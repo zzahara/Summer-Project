@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2010 Inyternet Archive
+# Copyright 2010 Internet Archive
 # Written by Zahara Docena
 # This program is distributed under the terms of the GNU General Public License v3
 # see: http://www.gnu.org/licenses/gpl.txt 
@@ -29,7 +29,8 @@ def process_file(options):
     current = []
     equal = False
     prev_line = ''
-    
+
+    print '\t'.join(field_list)
     for log_line in sys.stdin:
         try:
             log_data = log_line.split('\t')
@@ -89,7 +90,6 @@ def get_field_list():
     first_line = sys.stdin.readline()
     first_line = first_line.rstrip('\n')
 
-    print first_line
     field_list = first_line.split('\t')
     return strip_spaces(field_list)
 

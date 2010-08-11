@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2010 Inyternet Archive
+# Copyright 2010 Internet Archive
 # Written by Zahara Docena
 # This program is distributed under the terms of the GNU General Public License v3
 # see: http://www.gnu.org/licenses/gpl.txt 
@@ -16,7 +16,7 @@ from sys import argv
 from optparse import OptionParser
 
 argv
-first_line = ''
+field_list = []
 sort_fields = []
 parser = OptionParser()
 
@@ -33,7 +33,7 @@ def process_args():
     return options
 
 def get_script_args(options):
-    global sort_fields
+    global sort_fields, field_list
     field_list = get_field_list()
 
     script_args = []
@@ -74,22 +74,21 @@ def get_script_args(options):
     return script_args
 
 def get_field_list():
-    global first_line
-
-    char = os.read(0,1)
     first_line = ''
+    char = os.read(0,1)
     
     while char != '\n':
         first_line = first_line + char
         char = os.read(0,1)
-    
+
     first_line = first_line.rstrip()
-    field_names = first_line.split('\t')
+    field_list = first_line.split('\t')
 
-    return field_names
+    return field_list
 
-def sort(script_args):
-    global first_line
+def sort(script_args, field_list):
+    global field_list
+    first_line = '\t'.join(field_list)
     os.write(1,first_line + '\n')
     os.execv("sort-wrapper", script_args)
 

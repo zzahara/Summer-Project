@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2010 Inyternet Archive
+# Copyright 2010 Internet Archive
 # Written by Zahara Docena
 # This program is distributed under the terms of the GNU General Public License v3
 # see: http://www.gnu.org/licenses/gpl.txt 
@@ -44,6 +44,7 @@ def process_file():
     field_list = get_field_list()
     exec("include = lambda d: " + argv[1])
 
+    print '\t'.join(field_list)
     for log_line in sys.stdin:
         try:
             log_line = log_line.rstrip()
@@ -69,10 +70,9 @@ def list_to_dict(log_data, field_list):
 def get_field_list():
     first_line = sys.stdin.readline()
     first_line = first_line.rstrip('\n')
-    print first_line
     
     field_list = first_line.split('\t')
-    return strip_spaces(field_list)
+    return field_list
 
 def strip_spaces(list):
     for i in range(0, len(list)):

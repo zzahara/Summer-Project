@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2010 Inyternet Archive
+# Copyright 2010 Internet Archive
 # Written by Zahara Docena
 # This program is distributed under the terms of the GNU General Public License v3
 # see: http://www.gnu.org/licenses/gpl.txt 
@@ -169,7 +169,7 @@ def print_lines(lines, stats):
 
 def get_field_list():
     first_line = sys.stdin.readline()
-    first_line = first_line.rstrip()
+    first_line = first_line.rstrip('\n')
     field_list = first_line.split('\t')
     
     return field_list
