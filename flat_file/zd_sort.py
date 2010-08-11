@@ -86,7 +86,7 @@ def get_field_list():
 
     return field_names
 
-def sort(script_args, field_list):
+def sort(script_args):
     global field_list
     first_line = '\t'.join(field_list)
     os.write(1,first_line + '\n')
