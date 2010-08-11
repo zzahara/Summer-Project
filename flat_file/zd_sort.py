@@ -82,9 +82,9 @@ def get_field_list():
         char = os.read(0,1)
 
     first_line = first_line.rstrip()
-    field_list = first_line.split('\t')
+    field_names = first_line.split('\t')
 
-    return field_list
+    return field_names
 
 def sort(script_args, field_list):
     global field_list
