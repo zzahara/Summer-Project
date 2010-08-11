@@ -23,6 +23,7 @@
 import os
 import sys
 import errno
+import zd_lib
 from sys import argv
 from optparse import OptionParser
 
@@ -38,7 +39,7 @@ def process_args():
     return options
 
 def process_file(options):
-    field_list = get_field_list()
+    field_list = zd_lib.get_field_list()
 
     # store the indexes of the fields that will be added
     indexes = []
