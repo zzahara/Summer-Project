@@ -9,6 +9,55 @@
 # usage: ./zd_sort.py -f field1 -f field2 ... [-n] [field] [-r]
 # e.g. ./zd_sort.py -f page -f loadtime -n loadtime ... (will 1st sort by page, 2nd sort by loadtime numerically for same pages)
 
+# Example: ./zd_sort.py -f ip -f page
+# sorts by 1. ip 2. page
+
+
+# Input:
+# ip                         page           loadtime
+# 0.29.113.149          www.boy.com            32
+# 0.14.789.1            www.abc.com            14
+# 0.29.113.149          www.cat.com            32
+# 0.29.113.149          www.abc.com            56 
+# 0.78.234.654          www.fun.com            78
+# ...
+
+# Output:
+# ip                         page           loadtime
+# 0.14.789.1            www.abc.com            14
+# 0.29.113.149          www.abc.com            56 
+# 0.29.113.149          www.boy.com            32
+# 0.29.113.149          www.cat.com            32
+# 0.78.234.654          www.fun.com            78
+# ...
+
+# Example: ./zd_sort.py -f page -f loadtime -n loadtime -r
+
+# -r: reversed sort
+# -n loadtime: sort loadtime numerically
+
+# Input:
+# ip                    	page	            loadtime
+# 0.29.113.149      www.abc.com	          6	
+# 0.29.113.149      www.boy.com	          7	
+# 0.29.113.149      www.cat.com	          8
+# 0.14.789.1	        www.abc.com	          3
+# 0.78.234.654      www.fun.com	          9
+# 0.29.113.149      www.abc.com	          5
+# 0.29.113.149      www.abc.com	          4	
+
+
+# Output:
+# ip                    	page	            loadtime
+# 0.78.234.654	    www.fun.com	          9
+# 0.29.113.149	    www.cat.com	          8	
+# 0.29.113.149	    www.boy.com	          7	
+# 0.29.113.149	    www.abc.com	          6	
+# 0.29.113.149	    www.abc.com	          5
+# 0.29.113.149	    www.abc.com	          4	
+# 0.14.789.1        	www.abc.com	          3	
+
+
 import os
 import sys
 import errno
