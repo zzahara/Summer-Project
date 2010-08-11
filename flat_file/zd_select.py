@@ -8,7 +8,7 @@
 # Input: flat file (must include the selected fields in the condition)
 # Output: flat file (with lines that satisfy the given condition)
 
-# Example: ./zd_select.py "d['loadtime'] > 100"
+# Example 1: ./zd_select.py "d['loadtime'] > 100"
 
 # Input:
 # ip                         page               loadtime
@@ -19,6 +19,18 @@
 # Output:
 # ip                         page               loadtime
 # 0.29.113.149          www.yoursite.com         6789
+
+# Example 2: ./zd_select.py "d['loadtime'] > 100 and d['referrer'].startswith('http://www.google.com')"
+
+# Input:
+# ip                         page               loadtime        referrer
+# 0.29.113.149          www.yoursite.com         6789           http://www.google.com/search?sourceid=chrome&ie=UTF-8&q=archive
+# 0.29.113.149          www.yoursite.com         56             http://www.yahoo.com
+# ...
+
+# Output:
+# ip                         page               loadtime        referrer
+# 0.29.113.149          www.yoursite.com         6789           http://www.google.com/search?sourceid=chrome&ie=UTF-8&q=archive
 
 import re
 import sys

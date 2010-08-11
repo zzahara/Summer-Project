@@ -8,11 +8,18 @@
 # Input: flat file (must be sorted by the grouping specified in the options)
 # Output: flat file (with new field columns of the desired statistics)
 
-# usage: ./zd_stat.py ...desired options... -g field1 -f field2 -d values
-# Example: ./zd_stat.py -a ave_loadtime -c num_vals -g ip -g page -d loadtime
+# usage: ./zd_stat.py ...desired options... -g field1 -g field2 -d values
+# required: -g field1 -d values
 
-#   -g ip -g page: 
-#       - the input flat file is sorted by 1. ip 2. page
+# Example 1: ./zd_stat.py -a ave_load -c num_vals -g ip -d loadtime
+
+#   -option name:
+#       - name is the name of the new column with the statistics for that option
+#       - e.g. -a ave_loadtime:
+#             the name of the field with the average is ave_loadtime
+
+#   -g ip: 
+#       - the input flat file is sorted by ip
 #       - the program will compute the statistics of this grouping
 
 #   -d loadtime:
@@ -21,6 +28,8 @@
 # Input:
 # ip                         page           loadtime
 # 0.29.113.149          www.abc.com            56 
+# 0.29.113.149          www.abc.com            47 
+# 0.29.113.149          www.abc.com            38 
 # 0.29.113.149          www.boy.com            32
 # 0.29.113.149          www.cat.com            32
 # 0.14.789.1            www.abc.com            14
@@ -29,14 +38,45 @@
 
 
 # Output:
-# ip                         page           loadtime      ave_loadtime      num_values
-# 0.29.113.149          www.abc.com            56           40                  3
-# 0.29.113.149          www.boy.com            32           40                  3
-# 0.29.113.149          www.cat.com            32           40                  3
+# ip                         page           loadtime      ave_load          num_values
+# 0.29.113.149          www.abc.com            56           41                  5
+# 0.29.113.149          www.abc.com            47           41                  5
+# 0.29.113.149          www.abc.com            38           41                  5
+# 0.29.113.149          www.boy.com            32           41                  5
+# 0.29.113.149          www.cat.com            32           41                  5
 # 0.14.789.1            www.abc.com            14           14                  1
 # 0.78.234.654          www.fun.com            78           78                  1
 # ...
 
+
+# Example 2: ./zd_stat.py -a ave_load -c num_vals -t tp99_load -s standard_dev -g ip -g page -g locale -d loadtime
+
+#   -g ip -g page: 
+#       - the input flat file is sorted by 1. ip 2. page
+#       - the program will compute the statistics of this grouping
+
+# Input:
+# ip                         page           loadtime
+# 0.29.113.149          www.abc.com            56 
+# 0.29.113.149          www.abc.com            47 
+# 0.29.113.149          www.abc.com            38 
+# 0.29.113.149          www.boy.com            32
+# 0.29.113.149          www.cat.com            32
+# 0.14.789.1            www.abc.com            14
+# 0.78.234.654          www.fun.com            78
+# ...
+
+
+# Output:
+# ip                         page           loadtime      tp99_load      ave_load       num_values
+# 0.29.113.149          www.abc.com            56             56            47              3
+# 0.29.113.149          www.abc.com            47             56            47              3
+# 0.29.113.149          www.abc.com            38             56            47              3
+# 0.29.113.149          www.boy.com            32             32            32              1
+# 0.29.113.149          www.cat.com            32             32            32              1
+# 0.14.789.1            www.abc.com            14             14            14              1
+# 0.78.234.654          www.fun.com            78             78            78              1
+# ...
 
 import re
 import sys
@@ -55,7 +95,6 @@ def process_args():
     parser.add_option("-c", action="store", dest="count", help="counts the size of each group", default="-")
     parser.add_option("-t", action="store", dest="tp99", help="calculates tp99", default="-")
     parser.add_option("-a", action="store", dest="ave", help="calculates average load time", default="-")
-    parser.add_option("-b", action="store", dest="bounce_rate", help="calculates bounce rate", default="-")
     parser.add_option("-s", action="store", dest="standard_dev", help="calculates standard deviation", default="-")
     parser.add_option("-g", action="append", dest="grouping", help="calculates the statistics on the given grouping")
     parser.add_option("-d", action="store", dest="data", help="calculates the statistics of these values", default="loadtime")
@@ -66,7 +105,7 @@ def process_args():
 
 def process_file(options):
     field_list = zd_lib.get_field_list()
-    print_fields(field_list)
+    print_field_line(field_list)
 
     # store the indexes of grouping fields
     grouped_by = []
@@ -143,7 +182,7 @@ def in_group(log_data, grouped_by, current):
 # ------------------------------------------------------------  
 
 
-def print_fields(fields):
+def print_field_line(fields):
     stats = []
 
     if options.tp99 != '-':

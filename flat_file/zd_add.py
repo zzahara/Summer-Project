@@ -11,13 +11,13 @@
 # Example: ./zd_add.py -n sum_field -a loadtime -a server_ms
 
 # Input:
-# loadtime    server_ms
-# 500             200
+# loadtime    server_ms     locale
+# 500           200         en-US
 # ...
 
 # Output:
-# loadtime    server_ms  sum_field
-# 500         200        700
+# loadtime    server_ms     locale      sum_field
+# 500           200         en-US          700
 # ...
 
 import sys
